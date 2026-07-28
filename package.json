@@ -1,0 +1,13 @@
+{
+  "name": "content-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Content engine with the Web Design Killer skill stack (taste + impeccable-design + emil-kowalski-design + design-review).",
+  "scripts": {
+    "screenshot": "node scripts/screenshot.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}
