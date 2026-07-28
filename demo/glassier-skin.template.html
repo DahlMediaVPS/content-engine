@@ -1,0 +1,545 @@
+<style>
+/*FONTS*/
+
+:root {
+  --bg: #ECEEEC;
+  --surface: #F4F5F3;
+  --surface-2: #E3E7E3;
+  --ink: #1D211E;
+  --muted: #63695F;
+  --line: rgba(29, 33, 30, 0.12);
+  --accent: #C85F70;
+  --accent-soft: rgba(200, 95, 112, 0.14);
+  --deep: #1C2420;
+  --deep-ink: #EEF1EC;
+  --deep-muted: #9AA69C;
+  --btn-bg: #1D211E;
+  --btn-fg: #F4F5F3;
+  --shadow: 0 1px 2px rgba(29,33,30,.04), 0 12px 40px rgba(29,33,30,.08);
+  --radius: 14px;
+  --section-y: clamp(72px, 11vw, 136px);
+  --wrap: 1180px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131614;
+    --surface: #1A1E1B;
+    --surface-2: #232824;
+    --ink: #ECEFEA;
+    --muted: #98A199;
+    --line: rgba(236, 239, 234, 0.14);
+    --accent: #D67C8B;
+    --accent-soft: rgba(214, 124, 139, 0.16);
+    --deep: #0E110F;
+    --deep-ink: #ECEFEA;
+    --deep-muted: #98A199;
+    --btn-bg: #ECEFEA;
+    --btn-fg: #141715;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 50px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="light"] {
+  --bg: #ECEEEC; --surface: #F4F5F3; --surface-2: #E3E7E3; --ink: #1D211E;
+  --muted: #63695F; --line: rgba(29,33,30,0.12); --accent: #C85F70;
+  --accent-soft: rgba(200,95,112,0.14); --deep: #1C2420; --deep-ink: #EEF1EC;
+  --deep-muted: #9AA69C; --btn-bg: #1D211E; --btn-fg: #F4F5F3;
+  --shadow: 0 1px 2px rgba(29,33,30,.04), 0 12px 40px rgba(29,33,30,.08);
+}
+:root[data-theme="dark"] {
+  --bg: #131614; --surface: #1A1E1B; --surface-2: #232824; --ink: #ECEFEA;
+  --muted: #98A199; --line: rgba(236,239,234,0.14); --accent: #D67C8B;
+  --accent-soft: rgba(214,124,139,0.16); --deep: #0E110F; --deep-ink: #ECEFEA;
+  --deep-muted: #98A199; --btn-bg: #ECEFEA; --btn-fg: #141715;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 50px rgba(0,0,0,.4);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, 'Times New Roman', serif; font-weight: 600; margin: 0; line-height: 1.06; letter-spacing: -0.015em; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+img, svg { max-width: 100%; display: block; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+.eyebrow {
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 20px;
+}
+.lead { font-size: clamp(17px, 2.1vw, 20px); color: var(--muted); line-height: 1.62; max-width: 60ch; }
+.h2 { font-size: clamp(30px, 4.4vw, 46px); }
+.section { padding-top: var(--section-y); padding-bottom: var(--section-y); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; justify-content: center;
+  font-family: inherit; font-weight: 600; font-size: 16px; line-height: 1;
+  padding: 16px 26px; border-radius: 999px; cursor: pointer; border: 1px solid transparent;
+  transition: transform .16s var(--ease), background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+  min-height: 52px;
+}
+.btn:active { transform: scale(0.975); }
+.btn-primary { background: var(--btn-bg); color: var(--btn-fg); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--ink); }
+.btn:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 3px; }
+
+/* Nav */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  transition: background .3s var(--ease), border-color .3s var(--ease), backdrop-filter .3s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled { background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(1.4) blur(14px); border-bottom-color: var(--line); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+.brand { font-family: 'Fraunces', serif; font-weight: 600; font-size: 21px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 9px; }
+.brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.nav-links { display: flex; align-items: center; gap: 34px; }
+.nav-links a { font-size: 15px; color: var(--muted); transition: color .2s var(--ease); }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { display: flex; align-items: center; gap: 18px; }
+.menu-btn { display: none; background: none; border: 0; color: var(--ink); cursor: pointer; padding: 8px; }
+.mobile-menu { display: none; }
+
+/* Hero */
+.hero { position: relative; padding-top: clamp(40px, 6vw, 72px); padding-bottom: var(--section-y); }
+.hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.hero h1 { font-size: clamp(44px, 7vw, 88px); }
+.hero .lead { margin-top: 26px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.hero-trust { display: flex; align-items: center; gap: 14px; margin-top: 30px; color: var(--muted); font-size: 15px; }
+.stars { color: var(--accent); letter-spacing: 1px; font-size: 15px; }
+
+/* Product visual */
+.product-stage { position: relative; display: grid; place-items: center; min-height: 440px; }
+.glow {
+  position: absolute; inset: 0; margin: auto; width: 78%; aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 42%, var(--accent-soft), transparent 62%);
+  filter: blur(8px);
+}
+.bottle { position: relative; width: min(280px, 66%); filter: drop-shadow(0 30px 50px rgba(29,33,30,.18)); }
+@media (prefers-color-scheme: dark) { .bottle { filter: drop-shadow(0 30px 50px rgba(0,0,0,.5)); } }
+.pill { position: absolute; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 9px 15px; font-size: 13px; font-weight: 600; box-shadow: var(--shadow); display: flex; align-items: center; gap: 8px; }
+.pill .d { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.pill-1 { top: 12%; left: -2%; }
+.pill-2 { bottom: 14%; right: -4%; }
+
+/* Trust bar */
+.trustbar { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.trustbar-inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: 30px 0; }
+.trust-item { text-align: center; }
+.trust-item .n { font-family: 'Fraunces', serif; font-size: clamp(24px, 3vw, 32px); font-weight: 600; }
+.trust-item .l { font-size: 13.5px; color: var(--muted); margin-top: 4px; letter-spacing: .01em; }
+
+/* Science / split */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+.science-card {
+  border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface);
+  padding: clamp(26px, 3vw, 40px); box-shadow: var(--shadow);
+}
+.science-card h3 { font-size: 22px; margin-bottom: 10px; }
+.science-list { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 18px; }
+.science-list li { display: grid; grid-template-columns: 26px 1fr; gap: 14px; align-items: start; }
+.science-list .ic { width: 26px; height: 26px; border-radius: 8px; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent); margin-top: 2px; }
+.science-list b { font-weight: 600; }
+.science-list span { color: var(--muted); font-size: 15.5px; }
+
+/* Ritual steps */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 34px); margin-top: 56px; }
+.step { border-top: 2px solid var(--ink); padding-top: 22px; }
+.step .num { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--accent); letter-spacing: .05em; }
+.step h3 { font-size: 24px; margin: 14px 0 8px; }
+.step p { color: var(--muted); font-size: 15.5px; }
+
+/* Proof */
+.proof { background: var(--surface); }
+.quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.4vw, 28px); margin-top: 52px; }
+.quote { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 16px; }
+.quote .stars { font-size: 14px; }
+.quote p { font-size: 16px; line-height: 1.6; }
+.quote .who { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+.quote .av { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--surface-2)); flex: none; }
+.quote .who b { font-size: 15px; font-weight: 600; }
+.quote .who span { font-size: 13px; color: var(--muted); display: block; }
+
+/* Kits / pricing */
+.kits { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2.2vw, 26px); margin-top: 56px; align-items: stretch; }
+.kit { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 30px 28px; display: flex; flex-direction: column; transition: transform .2s var(--ease), box-shadow .25s var(--ease), border-color .2s var(--ease); }
+.kit:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.kit.featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.kit .tag { position: absolute; top: -12px; left: 28px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; }
+.kit .kname { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; }
+.kit .kdesc { color: var(--muted); font-size: 14.5px; margin-top: 6px; min-height: 42px; }
+.kit .price { display: flex; align-items: baseline; gap: 8px; margin: 20px 0 4px; }
+.kit .price .amt { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 600; }
+.kit .price .cur { font-size: 14px; color: var(--muted); }
+.kit .perk { font-size: 14px; color: var(--muted); }
+.kit ul { list-style: none; padding: 0; margin: 22px 0 26px; display: grid; gap: 12px; }
+.kit li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+.kit li svg { color: var(--accent); flex: none; margin-top: 3px; }
+.kit .btn { margin-top: auto; width: 100%; }
+
+/* FAQ */
+.faq { max-width: 780px; margin: 52px auto 0; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; padding: 24px 0; font-family: 'Fraunces', serif; font-size: clamp(18px, 2.2vw, 21px); font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary .chev { flex: none; transition: transform .25s var(--ease); color: var(--accent); }
+.faq details[open] summary .chev { transform: rotate(45deg); }
+.faq .ans { padding: 0 0 26px; color: var(--muted); font-size: 16px; line-height: 1.65; max-width: 66ch; }
+
+/* Final CTA */
+.final { background: var(--deep); color: var(--deep-ink); text-align: center; position: relative; overflow: hidden; }
+.final::before { content: ""; position: absolute; top: -30%; left: 50%; transform: translateX(-50%); width: 60%; aspect-ratio: 1; background: radial-gradient(circle, var(--accent-soft), transparent 68%); }
+.final .inner { position: relative; max-width: 680px; margin: 0 auto; }
+.final h2 { font-size: clamp(32px, 5vw, 56px); }
+.final p { color: var(--deep-muted); margin: 22px auto 34px; font-size: 19px; max-width: 46ch; }
+.final .btn-primary { background: var(--deep-ink); color: var(--deep); }
+
+/* Footer */
+.footer { border-top: 1px solid var(--line); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; padding: 56px 0; }
+.footer .brand { margin-bottom: 14px; }
+.footer .fcol h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 16px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; }
+.footer .fcol a { display: block; font-size: 15px; color: var(--muted); margin-bottom: 10px; transition: color .2s var(--ease); }
+.footer .fcol a:hover { color: var(--ink); }
+.footer-cols { display: flex; gap: clamp(40px, 6vw, 88px); flex-wrap: wrap; }
+.footer-bottom { border-top: 1px solid var(--line); padding: 22px 0; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.theme-toggle { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 7px 14px; font-size: 13px; font-family: inherit; cursor: pointer; display: inline-flex; gap: 7px; align-items: center; }
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink); }
+
+/* Reveal animation */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+.hero .reveal { transition-duration: .8s; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 8px; }
+  .product-stage { min-height: 340px; order: -1; }
+  .split { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; gap: 20px; }
+  .quotes { grid-template-columns: 1fr; }
+  .kits { grid-template-columns: 1fr; }
+  .kit.featured { order: -1; }
+  .trustbar-inner { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
+  .nav-links { display: none; }
+  .menu-btn { display: block; }
+  .nav-cta .btn { display: none; }
+  .mobile-menu.open { display: block; border-bottom: 1px solid var(--line); background: var(--surface); }
+  .mobile-menu .wrap { display: flex; flex-direction: column; gap: 4px; padding-top: 12px; padding-bottom: 20px; }
+  .mobile-menu a { padding: 12px 0; font-size: 17px; border-bottom: 1px solid var(--line); }
+  .mobile-menu .btn { margin-top: 14px; }
+}
+@media (max-width: 460px) {
+  .hero-cta { flex-direction: column; align-items: stretch; }
+  .hero-cta .btn { width: 100%; }
+  .pill-1 { left: 0; } .pill-2 { right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+
+<nav class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span>Glassier Skin</a>
+    <div class="nav-links">
+      <a href="#science">The Science</a>
+      <a href="#ritual">The Ritual</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#kits">Shop</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Shop the serum</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="wrap">
+      <a href="#science">The Science</a>
+      <a href="#ritual">The Ritual</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#kits">Shop</a>
+      <a class="btn btn-primary" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Shop the serum &mdash; $62.99</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow reveal">Salmon DNA &middot; PDRN Complex</p>
+        <h1 class="reveal">Glass skin starts with a barrier that works.</h1>
+        <p class="lead reveal">Glassier Skin&reg; Salmon DNA PDRN serum calms redness, restores deep hydration, and rebuilds a barrier worn down by dryness, irritation, and breakouts &mdash; in one clinical drop.</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Shop the serum &mdash; $62.99</a>
+          <a class="btn btn-ghost" href="#science">See the science</a>
+        </div>
+        <div class="hero-trust reveal">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>4.8 average &middot; loved by thousands of barriers across North America</span>
+        </div>
+      </div>
+      <div class="product-stage reveal">
+        <div class="glow"></div>
+        <span class="pill pill-1"><span class="d"></span>PDRN Salmon DNA</span>
+        <span class="pill pill-2"><span class="d"></span>Fragrance-free</span>
+        <svg class="bottle" viewBox="0 0 200 320" role="img" aria-label="Glassier Skin PDRN serum bottle">
+          <defs>
+            <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="0.5" stop-color="#f3eceb" stop-opacity="0.75"/>
+              <stop offset="1" stop-color="#e7dcdb" stop-opacity="0.85"/>
+            </linearGradient>
+            <linearGradient id="serum" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e79aa6"/>
+              <stop offset="1" stop-color="#c85f70"/>
+            </linearGradient>
+          </defs>
+          <!-- dropper cap -->
+          <rect x="78" y="8" width="44" height="46" rx="9" fill="#2a302b"/>
+          <rect x="86" y="52" width="28" height="16" rx="4" fill="#3a423b"/>
+          <!-- bottle body -->
+          <rect x="52" y="66" width="96" height="238" rx="26" fill="url(#glass)" stroke="#d9cfce" stroke-width="1.5"/>
+          <!-- serum fill -->
+          <clipPath id="bodyClip"><rect x="52" y="66" width="96" height="238" rx="26"/></clipPath>
+          <rect x="52" y="150" width="96" height="154" fill="url(#serum)" opacity="0.9" clip-path="url(#bodyClip)"/>
+          <!-- highlight -->
+          <rect x="63" y="80" width="14" height="210" rx="7" fill="#ffffff" opacity="0.5"/>
+          <!-- label -->
+          <rect x="66" y="188" width="68" height="86" rx="8" fill="#faf7f5" opacity="0.96"/>
+          <text x="100" y="214" text-anchor="middle" font-family="Fraunces, serif" font-size="13" font-weight="600" fill="#1d211e">Glassier</text>
+          <text x="100" y="230" text-anchor="middle" font-family="Fraunces, serif" font-size="13" font-weight="600" fill="#1d211e">Skin</text>
+          <line x1="80" y1="242" x2="120" y2="242" stroke="#c85f70" stroke-width="1.4"/>
+          <text x="100" y="258" text-anchor="middle" font-family="Hanken Grotesk, sans-serif" font-size="7.5" letter-spacing="1.2" fill="#63695f">SALMON DNA &middot; PDRN</text>
+          <text x="100" y="268" text-anchor="middle" font-family="Hanken Grotesk, sans-serif" font-size="7" letter-spacing="1" fill="#9a938f">100ml / 3.3 fl oz</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <section class="trustbar">
+    <div class="wrap trustbar-inner">
+      <div class="trust-item reveal"><div class="n">PDRN</div><div class="l">Salmon DNA polynucleotides</div></div>
+      <div class="trust-item reveal"><div class="n">100ml</div><div class="l">Double the size of most serums</div></div>
+      <div class="trust-item reveal"><div class="n">0</div><div class="l">Added fragrance or dyes</div></div>
+      <div class="trust-item reveal"><div class="n">Vegan*</div><div class="l">Cruelty-free formulation</div></div>
+    </div>
+  </section>
+
+  <!-- SCIENCE -->
+  <section class="section" id="science">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">Why it works</p>
+        <h2 class="h2">The barrier-repair molecule behind Korean glass skin.</h2>
+        <p class="lead" style="margin-top:22px">PDRN &mdash; polydeoxyribonucleotide from purified salmon DNA &mdash; is the ingredient K-beauty clinics reach for when a barrier is genuinely damaged. It signals your skin to do what it already knows how to do, faster.</p>
+        <ul class="science-list">
+          <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Rebuilds the barrier.</b> Supports the skin's repair signalling so redness and reactivity settle instead of flaring.</span></li>
+          <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Deep, lasting hydration.</b> Draws and holds water where dryness and tightness start.</span></li>
+          <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Calms, doesn't strip.</b> Fragrance-free and gentle enough for reactive, breakout-prone skin.</span></li>
+        </ul>
+      </div>
+      <div class="science-card reveal">
+        <h3>What's actually in the drop</h3>
+        <p style="color:var(--muted); font-size:15.5px">A short, deliberate formula &mdash; nothing to irritate a barrier you're trying to repair.</p>
+        <ul class="science-list" style="margin-top:22px">
+          <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3v18M3 12h18"/></svg></span><span><b>Salmon DNA PDRN</b><br><span>Repair signalling + recovery</span></span></li>
+          <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3v18M3 12h18"/></svg></span><span><b>Hyaluronic acid</b><br><span>Multi-weight hydration</span></span></li>
+          <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3v18M3 12h18"/></svg></span><span><b>Niacinamide</b><br><span>Tone, texture, resilience</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RITUAL -->
+  <section class="section" id="ritual" style="background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <div class="reveal" style="max-width:640px">
+        <p class="eyebrow">The ritual</p>
+        <h2 class="h2">Three steps, two minutes, once a night.</h2>
+        <p class="lead" style="margin-top:20px">Built around the Best Value kit &mdash; serum plus derma stamp &mdash; so active ingredients reach where the barrier actually needs them.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><div class="num">Step 01</div><h3>Prep</h3><p>Cleanse and pat dry. Start on bare skin so nothing sits between the serum and your barrier.</p></div>
+        <div class="step reveal"><div class="num">Step 02</div><h3>Micro-stamp</h3><p>Gently roll the derma stamp across the areas that need it most to open micro-channels for absorption.</p></div>
+        <div class="step reveal"><div class="num">Step 03</div><h3>Serum</h3><p>Press 2&ndash;3 drops of PDRN serum into the skin. Let it sink in before moisturiser. That's the whole routine.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="section proof" id="reviews">
+    <div class="wrap">
+      <div class="reveal" style="max-width:640px">
+        <p class="eyebrow">Real barriers, repaired</p>
+        <h2 class="h2">Skin that stopped fighting back.</h2>
+      </div>
+      <div class="quotes">
+        <figure class="quote reveal"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"Three weeks in and the redness across my cheeks has genuinely calmed down. First serum that didn't make my sensitive skin worse."</p><figcaption class="who"><span class="av"></span><span><b>Priya M.</b><span>Verified &middot; Toronto</span></span></figcaption></figure>
+        <figure class="quote reveal"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"My skin drinks this up. That tight, dry feeling after cleansing is just gone. The bottle is huge too &mdash; lasts forever."</p><figcaption class="who"><span class="av"></span><span><b>Jordan L.</b><span>Verified &middot; Vancouver</span></span></figcaption></figure>
+        <figure class="quote reveal"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"The stamp + serum combo is the real deal. Skin looks like glass in the morning &mdash; dewy, not greasy. Repurchasing the 2-pack."</p><figcaption class="who"><span class="av"></span><span><b>Mei C.</b><span>Verified &middot; Calgary</span></span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- KITS -->
+  <section class="section" id="kits">
+    <div class="wrap">
+      <div class="reveal" style="max-width:640px">
+        <p class="eyebrow">Choose your kit</p>
+        <h2 class="h2">Start the repair.</h2>
+        <p class="lead" style="margin-top:20px">Every kit ships the full-size 100ml serum. Prices in CAD.</p>
+      </div>
+      <div class="kits">
+        <div class="kit reveal">
+          <div class="kname">Starter</div>
+          <div class="kdesc">One serum. For first-timers testing the glow.</div>
+          <div class="price"><span class="amt">$62.99</span><span class="cur">CAD</span></div>
+          <div class="perk">1&times; 100ml PDRN serum</div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Full-size 100ml bottle</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>~2 months of nightly use</li>
+          </ul>
+          <a class="btn btn-ghost" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Add Starter</a>
+        </div>
+        <div class="kit featured reveal">
+          <span class="tag">Most Popular</span>
+          <div class="kname">Most Popular</div>
+          <div class="kdesc">Two serums. One for home, one for travel &mdash; or share.</div>
+          <div class="price"><span class="amt">$109.99</span><span class="cur">CAD</span></div>
+          <div class="perk">2&times; 100ml serum &middot; save vs. singles</div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>200ml total PDRN serum</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Best per-ml value on serum</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Never run out mid-routine</li>
+          </ul>
+          <a class="btn btn-primary" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Add Most Popular</a>
+        </div>
+        <div class="kit reveal">
+          <div class="kname">Best Value</div>
+          <div class="kdesc">The complete barrier-repair kit with derma stamp.</div>
+          <div class="price"><span class="amt">$129.99</span><span class="cur">CAD</span></div>
+          <div class="perk">2&times; serum + derma needle stamp</div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>200ml serum + derma stamp</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Micro-channels for absorption</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>The full nightly ritual</li>
+          </ul>
+          <a class="btn btn-ghost" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Add Best Value</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="background:var(--surface); border-top:1px solid var(--line)">
+    <div class="wrap">
+      <div class="reveal" style="text-align:center; max-width:640px; margin:0 auto">
+        <p class="eyebrow">Questions</p>
+        <h2 class="h2">Everything you'd ask a K-beauty expert.</h2>
+      </div>
+      <div class="faq reveal">
+        <details open><summary>What exactly is PDRN / Salmon DNA?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">PDRN (polydeoxyribonucleotide) is a purified fragment derived from salmon DNA. In skincare it's prized for supporting the skin's own barrier-repair and hydration processes &mdash; a mainstay of Korean clinical facials, now in a serum you use at home.</div></details>
+        <details><summary>Is it safe for sensitive, breakout-prone skin?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">The formula is fragrance-free and deliberately short &mdash; designed for barriers that are already irritated. As with any new active, patch test first, and introduce the derma stamp gradually.</div></details>
+        <details><summary>How long until I see results?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Many people notice more hydration and less tightness within the first week or two. Barrier repair is cumulative &mdash; consistent nightly use over 4&ndash;8 weeks is where the "glass skin" look tends to show.</div></details>
+        <details><summary>How do I use the derma stamp?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">On clean, dry skin, gently press the stamp across target areas before applying the serum. Keep it sanitised, start 1&ndash;2 nights a week, and never share it. The Best Value kit includes it.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section final">
+    <div class="wrap inner reveal">
+      <h2>Repair starts tonight.</h2>
+      <p>Give your barrier the one drop it's been missing &mdash; and let the glow follow.</p>
+      <a class="btn btn-primary" href="https://myglassierskin.com/products/glassier-skin-serum-korean-glass-skin-formula">Shop Glassier Skin &mdash; from $62.99</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="max-width:280px">
+        <div class="brand"><span class="dot"></span>Glassier Skin</div>
+        <p style="color:var(--muted); font-size:14.5px">Korean glass-skin barrier repair, powered by Salmon DNA PDRN. Made for skin that's had enough.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="fcol"><h4>Shop</h4><a href="#kits">The Serum</a><a href="#kits">Starter Kit</a><a href="#kits">Best Value Kit</a></div>
+        <div class="fcol"><h4>Learn</h4><a href="#science">The Science</a><a href="#ritual">The Ritual</a><a href="#reviews">Reviews</a></div>
+        <div class="fcol"><h4>Support</h4><a href="https://myglassierskin.com">Contact</a><a href="https://myglassierskin.com">Shipping</a><a href="https://myglassierskin.com">Returns</a></div>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>&copy; Glassier Skin. All rights reserved. *Claims illustrative &mdash; replace with substantiated copy before launch.</span>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>Theme
+      </button>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function () {
+  // Nav scroll state
+  var nav = document.getElementById('nav');
+  var onScroll = function () { nav.classList.toggle('scrolled', window.scrollY > 12); };
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu
+  var menuBtn = document.getElementById('menuBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', function () {
+    var open = mobileMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { mobileMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); });
+  });
+
+  // Scroll reveal with hero stagger
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var heroEls = Array.prototype.slice.call(document.querySelectorAll('.hero .reveal'));
+    heroEls.forEach(function (el, i) { el.style.transitionDelay = (i * 90) + 'ms'; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    requestAnimationFrame(function () { heroEls.forEach(function (el) { el.classList.add('in'); }); });
+  }
+
+  // Theme toggle
+  var toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', function () {
+    var root = document.documentElement;
+    var current = root.getAttribute('data-theme');
+    if (!current) {
+      current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  });
+})();
+</script>
