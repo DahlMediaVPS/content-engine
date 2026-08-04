@@ -6,10 +6,10 @@
 <title>DDEmpire — Command Center</title>
 <style>
   :root {
-    --bg: #0b0c0f; --panel: #14161c; --panel-2: #1b1e26; --line: #262a35;
+    --bg: #0b0c0f; --panel: #14161c; --panel-2: #1b1e26; --line: #262a35; --line-2: #313747;
     --ink: #e9ecf2; --ink-dim: #9aa2b1; --ink-faint: #6b7280;
     --gold: #c9a227; --gold-soft: #e5c65a; --purple: #b06ab3;
-    --green: #35c07a; --amber: #e0a92e; --slate: #5b6472; --red: #e5533c;
+    --green: #35c07a; --amber: #e0a92e; --slate: #5b6472; --red: #e5533c; --blue: #5b9dd9;
     --radius: 14px; --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px rgba(0,0,0,.4);
     font-synthesis: none;
   }
@@ -19,38 +19,46 @@
     color: var(--ink); font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased; line-height: 1.5;
   }
-  .wrap { max-width: 1160px; margin: 0 auto; padding: 32px 24px 80px; }
-
-  /* Header */
-  header.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 30px 24px 90px; }
+  header.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
   .brandmark { display: flex; align-items: center; gap: 14px; }
   .bolt { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center;
     background: linear-gradient(160deg, var(--gold-soft), var(--gold)); color: #1a1400; font-size: 22px; box-shadow: var(--shadow); }
   .brandmark h1 { font-size: 20px; margin: 0; letter-spacing: -.01em; }
-  .brandmark .sub { margin: 2px 0 0; font-size: 12.5px; color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; }
+  .brandmark .sub { margin: 2px 0 0; font-size: 12px; color: var(--ink-faint); letter-spacing: .05em; text-transform: uppercase; }
   .updated { font-size: 12.5px; color: var(--ink-faint); }
   .updated b { color: var(--ink-dim); font-weight: 600; }
+  .license { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; color: var(--gold-soft);
+    background: rgba(201,162,39,.1); box-shadow: inset 0 0 0 1px rgba(201,162,39,.28); padding: 3px 9px; border-radius: 999px; letter-spacing: .03em; }
 
-  /* Brand tabs */
-  .tabs { display: flex; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 4px; }
-  .tab { border: 0; background: transparent; color: var(--ink-dim); font: inherit; font-size: 13px; font-weight: 600;
-    padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: .15s; }
-  .tab[aria-selected="true"] { background: var(--panel-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
-  .tab:hover:not([aria-selected="true"]) { color: var(--ink); }
+  /* View nav */
+  nav.views { display: flex; gap: 4px; margin: 22px 0 26px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 5px; overflow-x: auto; }
+  nav.views button { border: 0; background: transparent; color: var(--ink-dim); font: inherit; font-size: 13.5px; font-weight: 600;
+    padding: 9px 16px; border-radius: 8px; cursor: pointer; transition: .15s; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  nav.views button[aria-current="true"] { background: var(--panel-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-2); }
+  nav.views button:hover:not([aria-current="true"]) { color: var(--ink); }
+  nav.views .ic { font-size: 14px; opacity: .9; }
 
-  /* KPI row */
-  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 22px 0 30px; }
+  .view { display: none; }
+  .view.active { display: block; animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .view.active { animation: none; } }
+
+  h2.section { font-size: 13px; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-dim);
+    margin: 30px 0 14px; display: flex; align-items: center; gap: 10px; }
+  h2.section:first-child { margin-top: 4px; }
+  h2.section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  h2.section .hint { text-transform: none; letter-spacing: 0; color: var(--ink-faint); font-weight: 400; font-size: 12.5px; }
+
+  /* KPIs */
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
   .kpi { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--line);
     border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
-  .kpi .n { font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+  .kpi .n { font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
   .kpi .l { font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; margin-top: 8px; }
   .kpi.accent .n { color: var(--gold-soft); }
 
-  h2.section { font-size: 13px; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-dim);
-    margin: 34px 0 14px; display: flex; align-items: center; gap: 10px; }
-  h2.section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-
-  /* Pipeline table */
   .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
   .tbl-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; min-width: 720px; }
@@ -63,9 +71,10 @@
   .ttl { font-weight: 600; }
   .muted { color: var(--ink-dim); }
   .pill { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 3px 9px; border-radius: 999px; }
-  .st-POSTED { color: var(--green); background: rgba(53,192,122,.12); box-shadow: inset 0 0 0 1px rgba(53,192,122,.25); }
+  .st-POSTED, .st-ACTIVE { color: var(--green); background: rgba(53,192,122,.12); box-shadow: inset 0 0 0 1px rgba(53,192,122,.25); }
   .st-PENDING { color: var(--amber); background: rgba(224,169,46,.12); box-shadow: inset 0 0 0 1px rgba(224,169,46,.25); }
   .st-DRAFT { color: var(--slate); background: rgba(91,100,114,.14); box-shadow: inset 0 0 0 1px rgba(91,100,114,.3); }
+  .st-RETIRED { color: var(--red); background: rgba(229,83,60,.1); box-shadow: inset 0 0 0 1px rgba(229,83,60,.28); }
   .cta-tag { font-size: 11px; font-weight: 700; color: var(--gold-soft); background: rgba(201,162,39,.1);
     box-shadow: inset 0 0 0 1px rgba(201,162,39,.28); padding: 3px 8px; border-radius: 6px; letter-spacing: .04em; }
 
@@ -98,7 +107,7 @@
   .copy.done { color: var(--green); border-color: rgba(53,192,122,.4); }
   .empty { padding: 18px; color: var(--ink-faint); font-size: 13px; font-style: italic; }
 
-  /* Reference / compliance grid */
+  /* Reference */
   .refgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .refcard { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
   .refcard h3 { margin: 0 0 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-dim); }
@@ -106,8 +115,9 @@
   .elem:last-child { border-bottom: 0; }
   .elem .en { font-weight: 600; font-size: 13px; }
   .elem .et { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); }
-  .elem code { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--ink-dim); background: #0e1015;
+  code.id { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--ink-dim); background: #0e1015;
     padding: 2px 6px; border-radius: 5px; margin-left: auto; cursor: pointer; border: 1px solid var(--line); white-space: nowrap; }
+  code.id:hover { border-color: var(--gold); color: var(--ink); }
   .elem.dead .en { color: var(--red); text-decoration: line-through; }
   .note { font-size: 11.5px; color: var(--ink-faint); margin-top: 4px; }
   .chips { display: flex; flex-wrap: wrap; gap: 7px; }
@@ -117,11 +127,87 @@
   .never h3 { color: var(--red); }
   .never .chip { color: #f0a897; background: rgba(229,83,60,.08); border-color: rgba(229,83,60,.3); }
   .never .lead { font-size: 12px; color: var(--ink-faint); margin: -4px 0 12px; }
-  footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--ink-faint); }
-  @media (max-width: 760px) {
+
+  /* Fleet */
+  .banner { display: flex; align-items: center; gap: 14px; background: linear-gradient(100deg, rgba(91,157,217,.1), rgba(91,157,217,.03));
+    border: 1px solid rgba(91,157,217,.28); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 16px; }
+  .banner .bi { font-size: 20px; }
+  .banner .bt { font-size: 13.5px; } .banner .bt b { color: var(--blue); }
+  .banner .bd { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  .banner button { margin-left: auto; border: 1px solid rgba(91,157,217,.4); background: rgba(91,157,217,.12); color: #bcdcf5;
+    font: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+  .posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .post { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 15px 16px; box-shadow: var(--shadow); }
+  .post .ph { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .post .ph .pn { font-weight: 700; color: var(--gold-soft); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .post .pt { font-size: 13.5px; font-weight: 600; line-height: 1.35; margin-bottom: 12px; }
+  .met { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 6px; }
+  .met .m { text-align: left; } .met .m .mv { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .met .m .ml { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
+  .met .m .mv.pending { color: var(--ink-faint); font-weight: 500; }
+
+  /* Characters */
+  .chargrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .charcard { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .charcard .ch { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; flex: none;
+    background: rgba(201,162,39,.14); box-shadow: inset 0 0 0 1px rgba(201,162,39,.3); }
+  .charcard.glassier .avatar { background: rgba(176,106,179,.16); box-shadow: inset 0 0 0 1px rgba(176,106,179,.35); }
+  .charcard .cn { font-size: 16px; font-weight: 700; } .charcard .cv { font-size: 11.5px; color: var(--ink-faint); }
+  .charcard .anchor { font-size: 12.5px; color: var(--ink-dim); line-height: 1.5; margin: 10px 0 12px; }
+  .charcard .eng { font-size: 11.5px; color: var(--ink-faint); }
+  .charcard .crow { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .charcard.retired { opacity: .6; }
+
+  /* Folders */
+  .tree { padding: 8px 6px; }
+  .tnode { }
+  .tself { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; }
+  .tself:hover { background: rgba(255,255,255,.02); }
+  .tself .fi { font-size: 15px; }
+  .tself .fn { font-size: 13.5px; font-weight: 600; }
+  .tchildren { margin-left: 22px; border-left: 1px solid var(--line); padding-left: 8px; }
+  .kind { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; padding: 2px 7px; border-radius: 5px; margin-left: 2px; }
+  .k-character { color: var(--purple); background: rgba(176,106,179,.12); }
+  .k-ready { color: var(--green); background: rgba(53,192,122,.12); }
+  .k-skills { color: var(--blue); background: rgba(91,157,217,.12); }
+  .k-production { color: var(--gold-soft); background: rgba(201,162,39,.1); }
+  .k-output { color: var(--ink-faint); background: rgba(255,255,255,.04); }
+
+  /* Timeline / canvas */
+  .tl-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tl-toolbar select { background: var(--panel-2); color: var(--ink); border: 1px solid var(--line-2); border-radius: 9px;
+    font: inherit; font-size: 13px; padding: 8px 12px; cursor: pointer; }
+  .tl-toolbar .tlabel { font-size: 12px; color: var(--ink-faint); }
+  .canvas { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 18px 18px 22px; overflow-x: auto; }
+  .ruler { position: relative; height: 20px; margin: 0 0 6px; min-width: 640px; }
+  .ruler .tick { position: absolute; top: 0; font-size: 10px; color: var(--ink-faint); font-variant-numeric: tabular-nums; transform: translateX(-2px); }
+  .ruler .tick::before { content: ""; position: absolute; top: 14px; left: 0; width: 1px; height: 8px; background: var(--line-2); }
+  .track { position: relative; height: 66px; min-width: 640px; background:
+      repeating-linear-gradient(90deg, transparent, transparent 79px, var(--line) 79px, var(--line) 80px);
+    border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; }
+  .track-label { font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .05em; margin: 0 0 6px; display:flex; gap:8px; align-items:center; }
+  .block { position: absolute; top: 7px; bottom: 7px; border-radius: 8px; cursor: pointer; overflow: hidden;
+    background: linear-gradient(180deg, rgba(201,162,39,.22), rgba(201,162,39,.12)); box-shadow: inset 0 0 0 1px rgba(201,162,39,.4);
+    padding: 7px 9px; transition: .12s; }
+  .block:hover { background: linear-gradient(180deg, rgba(201,162,39,.34), rgba(201,162,39,.18)); }
+  .block.sel { box-shadow: inset 0 0 0 1.5px var(--gold-soft), 0 0 0 2px rgba(201,162,39,.25); }
+  .block .bbeat { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-soft); }
+  .block .bid { font-size: 10px; color: var(--ink-dim); font-variant-numeric: tabular-nums; margin-top: 3px; }
+  .tl-detail { background: var(--panel-2); border: 1px solid var(--line); border-radius: 11px; padding: 14px 16px; margin-top: 4px; }
+  .tl-detail .td-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .tl-detail .dia2 { font-size: 13px; color: var(--ink-dim); font-style: italic; margin-bottom: 10px; }
+  .tl-detail pre { margin: 0; font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.6; color: #b9c2d0;
+    white-space: pre-wrap; word-break: break-word; background: #0e1015; border: 1px solid var(--line); border-radius: 8px; padding: 11px 13px; }
+
+  footer { margin-top: 44px; text-align: center; font-size: 12px; color: var(--ink-faint); }
+  footer code { color: var(--ink-dim); }
+  @media (max-width: 820px) {
     .kpis { grid-template-columns: repeat(2, 1fr); }
-    .refgrid { grid-template-columns: 1fr; }
-    .wrap { padding: 24px 16px 64px; }
+    .refgrid, .chargrid { grid-template-columns: 1fr; }
+    .wrap { padding: 22px 16px 70px; }
   }
 </style>
 </head>
@@ -132,32 +218,73 @@
       <div class="bolt">⚡</div>
       <div>
         <h1>DDEmpire Command Center</h1>
-        <p class="sub">Content Production Dashboard</p>
+        <p class="sub">Character-Consistent Content OS</p>
+        <span class="license">◆ One-time license · no subscription</span>
       </div>
     </div>
-    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
-      <div class="tabs" id="tabs" role="tablist"></div>
+    <div style="text-align:right;">
       <div class="updated">Synced <b id="updated">—</b></div>
     </div>
   </header>
 
-  <div class="kpis" id="kpis"></div>
+  <nav class="views" id="nav"></nav>
 
-  <h2 class="section">Content Pipeline</h2>
-  <div class="panel"><div class="tbl-scroll"><table>
-    <thead><tr>
-      <th>#</th><th>Title</th><th>Format</th><th>Platform</th><th>CTA</th><th>Status</th><th>Clips</th>
-    </tr></thead>
-    <tbody id="pipeline"></tbody>
-  </table></div></div>
+  <!-- OVERVIEW -->
+  <section class="view active" data-view="overview">
+    <div class="kpis" id="kpis"></div>
+    <h2 class="section">Content Pipeline</h2>
+    <div class="panel"><div class="tbl-scroll"><table>
+      <thead><tr><th>#</th><th>Title</th><th>Format</th><th>Platform</th><th>CTA</th><th>Status</th><th>Clips</th></tr></thead>
+      <tbody id="pipeline"></tbody>
+    </table></div></div>
+    <h2 class="section">Script Vault <span class="hint">— copy a prompt straight into Seedance</span></h2>
+    <div class="vault" id="vault"></div>
+    <h2 class="section">Reference &amp; Compliance</h2>
+    <div class="refgrid" id="refgrid"></div>
+  </section>
 
-  <h2 class="section">Script Vault <span style="text-transform:none;letter-spacing:0;color:var(--ink-faint);font-weight:400;">— copy a prompt straight into Seedance</span></h2>
-  <div class="vault" id="vault"></div>
+  <!-- FLEET -->
+  <section class="view" data-view="fleet">
+    <div class="banner">
+      <span class="bi">📡</span>
+      <div><div class="bt">Fleet analytics — <b>what's working</b></div>
+        <div class="bd">Live views, likes & engagement per post. Connect the Virlo scraper to auto-populate and surface breakout content.</div></div>
+      <button id="syncBtn">Sync Virlo</button>
+    </div>
+    <div class="kpis" id="fleetKpis" style="margin-bottom:24px"></div>
+    <h2 class="section">Posts <span class="hint">— metrics fill in once Virlo sync runs</span></h2>
+    <div class="posts" id="posts"></div>
+  </section>
 
-  <h2 class="section">Reference &amp; Compliance</h2>
-  <div class="refgrid" id="refgrid"></div>
+  <!-- CHARACTERS -->
+  <section class="view" data-view="characters">
+    <h2 class="section">Character Consistency <span class="hint">— locked identities baked into every prompt</span></h2>
+    <div class="chargrid" id="chargrid"></div>
+  </section>
 
-  <footer>DDEmpire Command Center · data in <code style="color:var(--ink-dim)">data.js</code> · mirrors your Content Tracker sheet</footer>
+  <!-- FOLDERS -->
+  <section class="view" data-view="folders">
+    <h2 class="section">Folder Organization <span class="hint">— mirrors your Drive · click an ID to copy</span></h2>
+    <div class="panel"><div class="tree" id="tree"></div></div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="view" data-view="timeline">
+    <h2 class="section">Timeline Editor <span class="hint">— character + clips on a canvas · click a block</span></h2>
+    <div class="tl-toolbar">
+      <span class="tlabel">Script</span>
+      <select id="tlSelect"></select>
+      <span class="tlabel" id="tlTotal"></span>
+    </div>
+    <div class="canvas">
+      <div class="ruler" id="ruler"></div>
+      <div class="track-label" id="tlTrackLabel">Track</div>
+      <div class="track" id="track"></div>
+    </div>
+    <div id="tlDetail"></div>
+  </section>
+
+  <footer>DDEmpire Command Center · data in <code>data.js</code> · mirrors your Content Tracker &amp; Drive</footer>
 </div>
 
 <script src="data.js"></script>
@@ -166,133 +293,179 @@
   const $ = (s, r=document) => r.querySelector(s);
   const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
   const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  let brand = "all";
+  const copyOn = (node, text) => { node.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(text);
+    const o = node.textContent; node.textContent = "copied ✓"; setTimeout(() => node.textContent = o, 1200); }; };
 
   $("#updated").textContent = D.updated;
 
-  // Brand tabs
-  const tabs = $("#tabs");
-  const brandDefs = [{ id: "all", name: "All" }, ...D.brands];
-  brandDefs.forEach(b => {
-    const t = el("button", "tab", esc(b.name));
-    t.setAttribute("role", "tab");
-    t.setAttribute("aria-selected", b.id === brand);
-    t.onclick = () => { brand = b.id; [...tabs.children].forEach(c => c.setAttribute("aria-selected", "false")); t.setAttribute("aria-selected", "true"); render(); };
-    tabs.appendChild(t);
+  // ---- Nav ----
+  const VIEWS = [
+    { id: "overview", ic: "▦", label: "Overview" },
+    { id: "fleet", ic: "📡", label: "Fleet" },
+    { id: "characters", ic: "🎭", label: "Characters" },
+    { id: "folders", ic: "🗂", label: "Folders" },
+    { id: "timeline", ic: "▶", label: "Timeline" }
+  ];
+  const nav = $("#nav");
+  VIEWS.forEach((v, i) => {
+    const b = el("button", null, `<span class="ic">${v.ic}</span>${v.label}`);
+    b.setAttribute("aria-current", i === 0 ? "true" : "false");
+    b.onclick = () => {
+      [...nav.children].forEach(c => c.setAttribute("aria-current", "false"));
+      b.setAttribute("aria-current", "true");
+      document.querySelectorAll(".view").forEach(s => s.classList.toggle("active", s.dataset.view === v.id));
+    };
+    nav.appendChild(b);
   });
 
-  const scriptsFor = () => D.scripts.filter(s => brand === "all" || s.brand === brand);
+  // ---- Overview ----
+  const posted = D.scripts.filter(s => s.status === "POSTED");
+  function kpis(target, items) { const w = $(target); w.innerHTML = "";
+    items.forEach(k => { const c = el("div", "kpi" + (k.accent ? " accent" : "")); c.append(el("div","n",k.n), el("div","l",esc(k.l))); w.appendChild(c); }); }
+  const clipsTotal = D.scripts.reduce((a, x) => a + (x.clips ? x.clips.length : 0), 0);
+  kpis("#kpis", [
+    { n: D.scripts.length, l: "Scripts", accent: true },
+    { n: posted.length, l: "Posted" },
+    { n: D.scripts.filter(s => s.status === "PENDING").length, l: "Pending" },
+    { n: D.scripts.filter(s => s.status === "DRAFT").length, l: "Draft" },
+    { n: clipsTotal, l: "Clips Ready" }
+  ]);
 
-  function renderKpis() {
-    const s = scriptsFor();
-    const by = st => s.filter(x => x.status === st).length;
-    const clips = s.reduce((a, x) => a + (x.clips ? x.clips.length : 0), 0);
-    const kpis = [
-      { n: s.length, l: "Scripts", accent: true },
-      { n: by("POSTED"), l: "Posted" },
-      { n: by("PENDING"), l: "Pending" },
-      { n: by("DRAFT"), l: "Draft" },
-      { n: clips, l: "Clips Ready" }
-    ];
-    const wrap = $("#kpis"); wrap.innerHTML = "";
-    kpis.forEach(k => { const c = el("div", "kpi" + (k.accent ? " accent" : "")); c.append(el("div", "n", k.n), el("div", "l", esc(k.l))); wrap.appendChild(c); });
-  }
+  const pbody = $("#pipeline");
+  D.scripts.forEach(s => { const tr = el("tr", "row");
+    tr.innerHTML = `<td class="num">${esc(s.num)}</td><td class="ttl">${esc(s.title)}<div class="muted" style="font-size:11.5px;font-weight:400">${esc(s.avatar)}</div></td>`+
+      `<td class="muted">${esc(s.format)}</td><td class="muted">${esc(s.platform)}</td><td><span class="cta-tag">${esc(s.cta)}</span></td>`+
+      `<td><span class="pill st-${esc(s.status)}">${esc(s.status)}</span></td><td class="num">${s.clips?s.clips.length:0}</td>`;
+    pbody.appendChild(tr); });
 
-  function renderPipeline() {
-    const body = $("#pipeline"); body.innerHTML = "";
-    scriptsFor().forEach(s => {
-      const tr = el("tr", "row");
-      tr.innerHTML =
-        `<td class="num">${esc(s.num)}</td>` +
-        `<td class="ttl">${esc(s.title)}<div class="muted" style="font-size:11.5px;font-weight:400">${esc(s.avatar)}</div></td>` +
-        `<td class="muted">${esc(s.format)}</td>` +
-        `<td class="muted">${esc(s.platform)}</td>` +
-        `<td><span class="cta-tag">${esc(s.cta)}</span></td>` +
-        `<td><span class="pill st-${esc(s.status)}">${esc(s.status)}</span></td>` +
-        `<td class="num">${s.clips ? s.clips.length : 0}</td>`;
-      body.appendChild(tr);
+  const vault = $("#vault");
+  D.scripts.forEach((s, i) => {
+    const card = el("details", "card"); if (i === 0 && s.clips && s.clips.length) card.open = true;
+    const sum = el("summary", null, `<span class="chev">▸</span><span class="s-num">${esc(s.num)}</span><span class="s-ttl">${esc(s.title)}</span>`+
+      `<span class="s-meta"><span class="cta-tag">${esc(s.cta)}</span><span class="pill st-${esc(s.status)}">${esc(s.status)}</span><span class="s-fmt">${esc(s.format)}</span></span>`);
+    card.appendChild(sum);
+    const clips = el("div", "clips");
+    if (!s.clips || !s.clips.length) clips.appendChild(el("div","empty","No clips scripted yet — this one's still a draft."));
+    else s.clips.forEach(c => {
+      const box = el("div", "clip");
+      box.appendChild(el("div","clip-head",`<span class="beat">${esc(c.beat)}</span><span class="clip-id">${esc(c.clip)}·${esc(c.scene)}</span><span class="ts">${esc(c.ts)}</span><span class="cap">${esc(c.caption)}</span>`));
+      if (c.dialogue) box.appendChild(el("div","dia","“"+esc(c.dialogue)+"”"));
+      const pb = el("div","promptbox"); const btn = el("button","copy","Copy prompt");
+      btn.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(c.prompt); btn.textContent="Copied ✓"; btn.classList.add("done"); setTimeout(()=>{btn.textContent="Copy prompt";btn.classList.remove("done");},1400); };
+      pb.append(el("pre",null,esc(c.prompt)), btn); box.appendChild(pb); clips.appendChild(box);
     });
-  }
+    card.appendChild(clips); vault.appendChild(card);
+  });
 
-  function renderVault() {
-    const v = $("#vault"); v.innerHTML = "";
-    scriptsFor().forEach((s, i) => {
-      const card = el("details", "card");
-      if (i === 0 && s.clips && s.clips.length) card.open = true;
-      const sum = el("summary");
-      sum.innerHTML =
-        `<span class="chev">▸</span><span class="s-num">${esc(s.num)}</span><span class="s-ttl">${esc(s.title)}</span>` +
-        `<span class="s-meta"><span class="cta-tag">${esc(s.cta)}</span><span class="pill st-${esc(s.status)}">${esc(s.status)}</span><span class="s-fmt">${esc(s.format)}</span></span>`;
-      card.appendChild(sum);
-      const clips = el("div", "clips");
-      if (!s.clips || !s.clips.length) {
-        clips.appendChild(el("div", "empty", "No clips scripted yet — this one's still a draft."));
-      } else {
-        s.clips.forEach(c => {
-          const box = el("div", "clip");
-          box.appendChild(el("div", "clip-head",
-            `<span class="beat">${esc(c.beat)}</span><span class="clip-id">${esc(c.clip)}·${esc(c.scene)}</span><span class="ts">${esc(c.ts)}</span><span class="cap">${esc(c.caption)}</span>`));
-          if (c.dialogue) box.appendChild(el("div", "dia", "“" + esc(c.dialogue) + "”"));
-          const pb = el("div", "promptbox");
-          const pre = el("pre", null, esc(c.prompt));
-          const btn = el("button", "copy", "Copy prompt");
-          btn.onclick = () => {
-            navigator.clipboard?.writeText(c.prompt);
-            btn.textContent = "Copied ✓"; btn.classList.add("done");
-            setTimeout(() => { btn.textContent = "Copy prompt"; btn.classList.remove("done"); }, 1400);
-          };
-          pb.append(pre, btn); box.appendChild(pb); clips.appendChild(box);
-        });
-      }
-      card.appendChild(clips); v.appendChild(card);
+  (function renderRef(){ const r = D.reference, g = $("#refgrid");
+    const e1 = el("div","refcard"); e1.appendChild(el("h3",null,"Character &amp; Product Locks"));
+    r.elements.forEach(e => { const row = el("div","elem"+(e.dead?" dead":""));
+      row.innerHTML = `<div><div class="en">${esc(e.name)}</div><div class="et">${esc(e.type)}</div>${e.note?`<div class="note">${esc(e.note)}</div>`:""}</div>`;
+      const code = el("code","id",e.value.slice(0,8)+"…"); code.title="Copy full ID"; copyOn(code, e.value); row.appendChild(code); e1.appendChild(row); });
+    g.appendChild(e1);
+    const e2 = el("div","refcard"); e2.appendChild(el("h3",null,"CTA Keywords &amp; Post Timing"));
+    const cc = el("div","chips"); r.ctas.forEach(c => cc.appendChild(el("span","chip",`<b>${esc(c.word)}</b> · ${esc(c.use)}`))); e2.appendChild(cc);
+    e2.appendChild(el("div","note","Best windows")); const tc = el("div","chips"); r.postTiming.forEach(t => tc.appendChild(el("span","chip",esc(t)))); e2.appendChild(tc); g.appendChild(e2);
+    const e3 = el("div","refcard never"); e3.appendChild(el("h3",null,"⛔ FTC Red List — Never Say"));
+    e3.appendChild(el("div","lead","The avatar must never make these claims. Read RULES.md before writing."));
+    const nc = el("div","chips"); r.neverSay.forEach(w => nc.appendChild(el("span","chip",esc(w)))); e3.appendChild(nc); g.appendChild(e3);
+    const e4 = el("div","refcard"); e4.appendChild(el("h3",null,"Drive References"));
+    r.folders.forEach(f => { const row = el("div","elem"); row.innerHTML = `<div class="en" style="font-size:13px">${esc(f.name)}</div>`;
+      const code = el("code","id",f.id.slice(0,8)+"…"); code.title="Copy ID"; copyOn(code, f.id); row.appendChild(code); e4.appendChild(row); });
+    g.appendChild(e4);
+  })();
+
+  // ---- Fleet ----
+  kpis("#fleetKpis", [
+    { n: posted.length, l: "Live Posts", accent: true },
+    { n: "—", l: "Total Views" }, { n: "—", l: "Avg Engagement" }, { n: "—", l: "Top Hook" }, { n: D.scripts.filter(s=>s.status==="PENDING").length, l: "Queued" }
+  ]);
+  const postsWrap = $("#posts");
+  const fleetItems = D.scripts.filter(s => s.status === "POSTED" || s.status === "PENDING");
+  if (!fleetItems.length) postsWrap.appendChild(el("div","empty","No posts live yet."));
+  fleetItems.forEach(s => {
+    const p = el("div","post");
+    p.appendChild(el("div","ph",`<span class="pn">${esc(s.num)}</span><span class="pill st-${esc(s.status)}">${esc(s.status)}</span>`));
+    p.appendChild(el("div","pt",esc(s.title)));
+    const m = s.metrics || {}; const met = el("div","met");
+    [["views","Views"],["likes","Likes"],["comments","Comments"],["shares","Shares"],["saves","Saves"]].forEach(([k,l]) => {
+      const cell = el("div","m"); const v = m[k]; cell.innerHTML = `<div class="mv${v==null?" pending":""}">${v==null?"—":esc(v)}</div><div class="ml">${l}</div>`; met.appendChild(cell); });
+    p.appendChild(met); postsWrap.appendChild(p);
+  });
+  $("#syncBtn").onclick = () => { const b = $("#syncBtn"); b.textContent = "Connect Virlo →"; b.style.opacity=".8";
+    alert("Virlo sync isn't wired yet.\n\nAsk Claude: “wire the dashboard to Virlo” and it'll pull live views/engagement into Fleet automatically."); };
+
+  // ---- Characters ----
+  (function renderChars(){ const g = $("#chargrid");
+    D.characters.forEach(c => {
+      const brand = c.brand === "glassier" ? " glassier" : "";
+      const card = el("div","charcard"+brand+(c.status==="RETIRED"?" retired":""));
+      const emoji = c.brand === "glassier" ? "🌿" : "🩺";
+      card.appendChild(el("div","ch",`<div class="avatar">${emoji}</div><div><div class="cn">${esc(c.name)} <span class="cv">v${esc(c.version)}</span></div><div class="cv">${esc((D.brands.find(b=>b.id===c.brand)||{}).name||"")}</div></div><span class="pill st-${esc(c.status)}" style="margin-left:auto">${esc(c.status)}</span>`));
+      card.appendChild(el("div","anchor",esc(c.anchor)));
+      card.appendChild(el("div","eng","⚙ "+esc(c.engines)));
+      const crow = el("div","crow");
+      const code = el("code","id",String(c.id).slice(0,8)+"…"); code.title="Copy element ID"; copyOn(code, c.id); crow.appendChild(code);
+      if (c.refFolder) { const rf = el("code","id","ref folder"); rf.title="Copy Drive folder ID"; copyOn(rf, c.refFolder); crow.appendChild(rf); }
+      card.appendChild(crow); g.appendChild(card);
     });
-  }
+  })();
 
-  function renderRef() {
-    const r = D.reference, g = $("#refgrid"); g.innerHTML = "";
+  // ---- Folders ----
+  (function renderTree(){ const root = $("#tree");
+    const icon = k => k==="character"?"🎭":k==="ready"?"✅":k==="skills"?"📚":k==="production"?"🎬":k==="output"?"📄":"📁";
+    const node = n => {
+      const wrap = el("div","tnode");
+      const self = el("div","tself"); self.innerHTML = `<span class="fi">${icon(n.kind)}</span><span class="fn">${esc(n.name)}</span>${n.kind?`<span class="kind k-${esc(n.kind)}">${esc(n.kind)}</span>`:""}`;
+      if (n.id) { const code = el("code","id",n.id.slice(0,8)+"…"); code.style.marginLeft="8px"; code.title="Copy folder ID"; copyOn(code, n.id); self.appendChild(code); }
+      wrap.appendChild(self);
+      if (n.children && n.children.length) { const kids = el("div","tchildren"); n.children.forEach(c => kids.appendChild(node(c))); wrap.appendChild(kids); }
+      return wrap;
+    };
+    D.tree.forEach(n => root.appendChild(node(n)));
+  })();
 
-    const elems = el("div", "refcard"); elems.appendChild(el("h3", null, "Character &amp; Product Locks"));
-    r.elements.forEach(e => {
-      const row = el("div", "elem" + (e.dead ? " dead" : ""));
-      row.innerHTML = `<div><div class="en">${esc(e.name)}</div><div class="et">${esc(e.type)}</div>${e.note ? `<div class="note">${esc(e.note)}</div>` : ""}</div>`;
-      const code = el("code", null, e.value.slice(0, 8) + "…");
-      code.title = "Click to copy full ID";
-      code.onclick = () => { navigator.clipboard?.writeText(e.value); const o = code.textContent; code.textContent = "copied ✓"; setTimeout(() => code.textContent = o, 1200); };
-      row.appendChild(code); elems.appendChild(row);
+  // ---- Timeline ----
+  const scriptsWithClips = D.scripts.filter(s => s.clips && s.clips.length);
+  const sel = $("#tlSelect");
+  scriptsWithClips.forEach(s => sel.appendChild(el("option", null, `${s.num} — ${esc(s.title)}`)));
+  const toSec = t => { const [m, s] = t.split(":").map(Number); return m*60 + s; };
+  function drawTimeline(idx) {
+    const s = scriptsWithClips[idx]; if (!s) return;
+    $("#tlTrackLabel").innerHTML = `${esc(s.avatar)} <span class="kind k-character">${esc(s.num)}</span>`;
+    // sequential layout: each clip's duration placed end-to-end
+    const segs = s.clips.map(c => { const [a, b] = c.ts.split(/[–-]/).map(x => toSec(x.trim())); return { c, dur: Math.max(1, b - a) }; });
+    const total = segs.reduce((a, x) => a + x.dur, 0);
+    $("#tlTotal").textContent = `· ${s.clips.length} clips · ${total}s total`;
+    // ruler
+    const ruler = $("#ruler"); ruler.innerHTML = "";
+    const steps = Math.ceil(total / 5);
+    for (let i = 0; i <= steps; i++) { const sec = i*5; const tick = el("div","tick",`0:${String(sec).padStart(2,"0")}`); tick.style.left = (sec/total*100)+"%"; ruler.appendChild(tick); }
+    // blocks
+    const track = $("#track"); track.innerHTML = ""; let acc = 0;
+    segs.forEach((seg, i) => {
+      const left = acc/total*100, width = seg.dur/total*100; acc += seg.dur;
+      const b = el("div","block"); b.style.left = left+"%"; b.style.width = "calc("+width+"% - 4px)";
+      b.innerHTML = `<div class="bbeat">${esc(seg.c.beat)}</div><div class="bid">${esc(seg.c.clip)}·${esc(seg.c.scene)} · ${seg.dur}s</div>`;
+      b.onclick = () => { [...track.children].forEach(x => x.classList.remove("sel")); b.classList.add("sel"); showDetail(seg.c); };
+      track.appendChild(b);
     });
-    g.appendChild(elems);
-
-    const cta = el("div", "refcard");
-    cta.appendChild(el("h3", null, "CTA Keywords &amp; Post Timing"));
-    const cc = el("div", "chips");
-    r.ctas.forEach(c => cc.appendChild(el("span", "chip", `<b>${esc(c.word)}</b> · ${esc(c.use)}`)));
-    cta.appendChild(cc);
-    cta.appendChild(el("div", "note", "Best windows"));
-    const tc = el("div", "chips");
-    r.postTiming.forEach(t => tc.appendChild(el("span", "chip", esc(t))));
-    cta.appendChild(tc);
-    g.appendChild(cta);
-
-    const never = el("div", "refcard never");
-    never.appendChild(el("h3", null, "⛔ FTC Red List — Never Say"));
-    never.appendChild(el("div", "lead", "The avatar must never make these claims. Read RULES.md before writing."));
-    const nc = el("div", "chips");
-    r.neverSay.forEach(w => nc.appendChild(el("span", "chip", esc(w))));
-    never.appendChild(nc); g.appendChild(never);
-
-    const fol = el("div", "refcard"); fol.appendChild(el("h3", null, "Drive References"));
-    r.folders.forEach(f => {
-      const row = el("div", "elem");
-      row.innerHTML = `<div class="en" style="font-size:13px">${esc(f.name)}</div>`;
-      const code = el("code", null, f.id.slice(0, 8) + "…"); code.title = "Click to copy ID";
-      code.onclick = () => { navigator.clipboard?.writeText(f.id); const o = code.textContent; code.textContent = "copied ✓"; setTimeout(() => code.textContent = o, 1200); };
-      row.appendChild(code); fol.appendChild(row);
-    });
-    g.appendChild(fol);
+    // auto-select first
+    if (track.firstChild) { track.firstChild.classList.add("sel"); showDetail(segs[0].c); }
   }
-
-  function render() { renderKpis(); renderPipeline(); renderVault(); renderRef(); }
-  render();
+  function showDetail(c) {
+    const d = $("#tlDetail");
+    d.innerHTML = "";
+    const box = el("div","tl-detail");
+    box.appendChild(el("div","td-head",`<span class="beat">${esc(c.beat)}</span><span class="clip-id">${esc(c.clip)}·${esc(c.scene)}</span><span class="ts">${esc(c.ts)}</span><span class="cap">${esc(c.caption)}</span>`));
+    if (c.dialogue) box.appendChild(el("div","dia2","“"+esc(c.dialogue)+"”"));
+    const pre = el("pre", null, esc(c.prompt)); box.appendChild(pre);
+    const btn = el("button","copy","Copy prompt"); btn.style.marginTop="10px";
+    btn.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(c.prompt); btn.textContent="Copied ✓"; btn.classList.add("done"); setTimeout(()=>{btn.textContent="Copy prompt";btn.classList.remove("done");},1400); };
+    box.appendChild(btn); d.appendChild(box);
+  }
+  sel.onchange = () => drawTimeline(sel.selectedIndex);
+  if (scriptsWithClips.length) drawTimeline(0);
 </script>
 </body>
 </html>

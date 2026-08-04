@@ -10,6 +10,37 @@ window.DDEMPIRE_DATA = {
     { id: "glassier", name: "Glassier Skin", avatar: "Nicole 4.0", accent: "#b06ab3" }
   ],
 
+  // Character consistency — locked reference identities per brand
+  characters: [
+    { name: "Dr. Becky", version: "4.0", brand: "mdklean", status: "ACTIVE",
+      id: "6c62aea9-6002-4b10-b359-b383e99d47f7",
+      engines: "Nano Banana Pro · Seedance 2.0 · Kling 3.0",
+      anchor: "Mid-50s, warm hazel eyes, silver-grey wavy hair, real skin texture, white linen shirt, thin gold chain — natural-medicine practitioner, NOT clinical.",
+      refFolder: "1Ks2ILpowKUTQhvZjRlnM4J3R2JWgdK_m" },
+    { name: "Nicole", version: "4.0", brand: "glassier", status: "ACTIVE",
+      id: "nicole-4.0",
+      engines: "Nano Banana Pro · Seedance 2.0",
+      anchor: "Late 30s, dark wavy shoulder-length hair, distinctly green eyes, olive-warm skin, strong dark brows, natural bare face, lavender-pink gel nails.",
+      refFolder: "1DlTl2Gmzq1G8EMcvSIZ0SOXHlBry3Biy" },
+    { name: "Dr. Becky (Soul)", version: "3.0", brand: "mdklean", status: "RETIRED",
+      id: "ede904c9-d7a1-4968-9589-18448742ecab",
+      engines: "Soul V2 — deprecated", anchor: "Retired Soul ID. Do not use.", refFolder: null }
+  ],
+
+  // Folder organization — mirrors your Drive structure
+  tree: [
+    { name: "⚡ CONTENT HUB — MEDIA EMPIRE", id: "1M6t1wY33t-xL1_ksbl9tyWzpNnashGNR", children: [
+      { name: "CHARACTER 1 — NICOLE (Glassier Skin)", id: "1DlTl2Gmzq1G8EMcvSIZ0SOXHlBry3Biy", kind: "character" },
+      { name: "CHARACTER 2 — DR. BECKY", id: "1Ks2ILpowKUTQhvZjRlnM4J3R2JWgdK_m", kind: "character" },
+      { name: "READY TO POST", id: "1lA3RKOdClXpVt5g_GlqEnCNVWqZ_ih8f", kind: "ready" },
+      { name: "SKILLS LIBRARY", id: "1kTxOXz2oroXz1yTr0yD2nBJDsy_GS0Yc", kind: "skills" }
+    ]},
+    { name: "Content Engine — Reels Production", id: "1avFXpMgJ76_5joVphSdilft9vzD6wwnn", kind: "production", children: [
+      { name: "Glassier_[Script]_[Date]/", kind: "output" },
+      { name: "MdKlean_[Script]_[Date]/", kind: "output" }
+    ]}
+  ],
+
   // Reference card — character/product locks, CTA keywords, compliance, timing
   reference: {
     elements: [
