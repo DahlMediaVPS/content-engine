@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DDEmpire — Command Center</title>
+<style>
+  :root {
+    --bg: #0b0c0f; --panel: #14161c; --panel-2: #1b1e26; --line: #262a35;
+    --ink: #e9ecf2; --ink-dim: #9aa2b1; --ink-faint: #6b7280;
+    --gold: #c9a227; --gold-soft: #e5c65a; --purple: #b06ab3;
+    --green: #35c07a; --amber: #e0a92e; --slate: #5b6472; --red: #e5533c;
+    --radius: 14px; --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px rgba(0,0,0,.4);
+    font-synthesis: none;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: radial-gradient(1200px 600px at 70% -10%, #1a1c24 0%, var(--bg) 55%) fixed;
+    color: var(--ink); font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+  }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* Header */
+  header.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+  .brandmark { display: flex; align-items: center; gap: 14px; }
+  .bolt { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center;
+    background: linear-gradient(160deg, var(--gold-soft), var(--gold)); color: #1a1400; font-size: 22px; box-shadow: var(--shadow); }
+  .brandmark h1 { font-size: 20px; margin: 0; letter-spacing: -.01em; }
+  .brandmark .sub { margin: 2px 0 0; font-size: 12.5px; color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; }
+  .updated { font-size: 12.5px; color: var(--ink-faint); }
+  .updated b { color: var(--ink-dim); font-weight: 600; }
+
+  /* Brand tabs */
+  .tabs { display: flex; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 4px; }
+  .tab { border: 0; background: transparent; color: var(--ink-dim); font: inherit; font-size: 13px; font-weight: 600;
+    padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: .15s; }
+  .tab[aria-selected="true"] { background: var(--panel-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+  .tab:hover:not([aria-selected="true"]) { color: var(--ink); }
+
+  /* KPI row */
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 22px 0 30px; }
+  .kpi { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .kpi .n { font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+  .kpi .l { font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; margin-top: 8px; }
+  .kpi.accent .n { color: var(--gold-soft); }
+
+  h2.section { font-size: 13px; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-dim);
+    margin: 34px 0 14px; display: flex; align-items: center; gap: 10px; }
+  h2.section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* Pipeline table */
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint);
+    font-weight: 600; padding: 13px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: 13px 16px; border-bottom: 1px solid var(--line); font-size: 13.5px; vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr.row:hover td { background: rgba(255,255,255,.015); }
+  .num { color: var(--ink-faint); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .ttl { font-weight: 600; }
+  .muted { color: var(--ink-dim); }
+  .pill { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 3px 9px; border-radius: 999px; }
+  .st-POSTED { color: var(--green); background: rgba(53,192,122,.12); box-shadow: inset 0 0 0 1px rgba(53,192,122,.25); }
+  .st-PENDING { color: var(--amber); background: rgba(224,169,46,.12); box-shadow: inset 0 0 0 1px rgba(224,169,46,.25); }
+  .st-DRAFT { color: var(--slate); background: rgba(91,100,114,.14); box-shadow: inset 0 0 0 1px rgba(91,100,114,.3); }
+  .cta-tag { font-size: 11px; font-weight: 700; color: var(--gold-soft); background: rgba(201,162,39,.1);
+    box-shadow: inset 0 0 0 1px rgba(201,162,39,.28); padding: 3px 8px; border-radius: 6px; letter-spacing: .04em; }
+
+  /* Script vault */
+  .vault { display: grid; gap: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .card > summary { list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: center; gap: 14px; }
+  .card > summary::-webkit-details-marker { display: none; }
+  .chev { color: var(--ink-faint); transition: transform .18s ease; flex: none; }
+  .card[open] .chev { transform: rotate(90deg); }
+  .card .s-num { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--gold-soft); font-size: 14px; }
+  .card .s-ttl { font-weight: 600; font-size: 15px; }
+  .card .s-meta { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .card .s-fmt { font-size: 12px; color: var(--ink-faint); }
+  .clips { padding: 4px 18px 18px; display: grid; gap: 10px; }
+  .clip { border: 1px solid var(--line); border-radius: 11px; background: var(--panel-2); overflow: hidden; }
+  .clip-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; flex-wrap: wrap; }
+  .beat { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink);
+    background: rgba(255,255,255,.06); padding: 3px 8px; border-radius: 5px; }
+  .clip-id { font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .ts { font-size: 12px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .cap { margin-left: auto; font-size: 11.5px; font-weight: 700; color: var(--gold-soft); letter-spacing: .03em; }
+  .dia { padding: 0 14px 12px; font-size: 13px; color: var(--ink-dim); font-style: italic; }
+  .promptbox { border-top: 1px solid var(--line); background: #0e1015; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
+  .promptbox pre { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px;
+    line-height: 1.6; color: #b9c2d0; white-space: pre-wrap; word-break: break-word; flex: 1; }
+  .copy { flex: none; border: 1px solid var(--line); background: var(--panel-2); color: var(--ink-dim); font: inherit;
+    font-size: 11.5px; font-weight: 600; padding: 7px 12px; border-radius: 8px; cursor: pointer; transition: .15s; white-space: nowrap; }
+  .copy:hover { color: var(--ink); border-color: var(--gold); }
+  .copy.done { color: var(--green); border-color: rgba(53,192,122,.4); }
+  .empty { padding: 18px; color: var(--ink-faint); font-size: 13px; font-style: italic; }
+
+  /* Reference / compliance grid */
+  .refgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .refcard { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .refcard h3 { margin: 0 0 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-dim); }
+  .elem { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .elem:last-child { border-bottom: 0; }
+  .elem .en { font-weight: 600; font-size: 13px; }
+  .elem .et { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); }
+  .elem code { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--ink-dim); background: #0e1015;
+    padding: 2px 6px; border-radius: 5px; margin-left: auto; cursor: pointer; border: 1px solid var(--line); white-space: nowrap; }
+  .elem.dead .en { color: var(--red); text-decoration: line-through; }
+  .note { font-size: 11.5px; color: var(--ink-faint); margin-top: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip { font-size: 12px; padding: 4px 10px; border-radius: 7px; background: var(--panel-2); border: 1px solid var(--line); color: var(--ink-dim); }
+  .chip b { color: var(--gold-soft); font-weight: 700; }
+  .never { border-color: rgba(229,83,60,.35) !important; }
+  .never h3 { color: var(--red); }
+  .never .chip { color: #f0a897; background: rgba(229,83,60,.08); border-color: rgba(229,83,60,.3); }
+  .never .lead { font-size: 12px; color: var(--ink-faint); margin: -4px 0 12px; }
+  footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--ink-faint); }
+  @media (max-width: 760px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .refgrid { grid-template-columns: 1fr; }
+    .wrap { padding: 24px 16px 64px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brandmark">
+      <div class="bolt">⚡</div>
+      <div>
+        <h1>DDEmpire Command Center</h1>
+        <p class="sub">Content Production Dashboard</p>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="updated">Synced <b id="updated">—</b></div>
+    </div>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <h2 class="section">Content Pipeline</h2>
+  <div class="panel"><div class="tbl-scroll"><table>
+    <thead><tr>
+      <th>#</th><th>Title</th><th>Format</th><th>Platform</th><th>CTA</th><th>Status</th><th>Clips</th>
+    </tr></thead>
+    <tbody id="pipeline"></tbody>
+  </table></div></div>
+
+  <h2 class="section">Script Vault <span style="text-transform:none;letter-spacing:0;color:var(--ink-faint);font-weight:400;">— copy a prompt straight into Seedance</span></h2>
+  <div class="vault" id="vault"></div>
+
+  <h2 class="section">Reference &amp; Compliance</h2>
+  <div class="refgrid" id="refgrid"></div>
+
+  <footer>DDEmpire Command Center · data in <code style="color:var(--ink-dim)">data.js</code> · mirrors your Content Tracker sheet</footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+  const D = window.DDEMPIRE_DATA;
+  const $ = (s, r=document) => r.querySelector(s);
+  const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
+  const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let brand = "all";
+
+  $("#updated").textContent = D.updated;
+
+  // Brand tabs
+  const tabs = $("#tabs");
+  const brandDefs = [{ id: "all", name: "All" }, ...D.brands];
+  brandDefs.forEach(b => {
+    const t = el("button", "tab", esc(b.name));
+    t.setAttribute("role", "tab");
+    t.setAttribute("aria-selected", b.id === brand);
+    t.onclick = () => { brand = b.id; [...tabs.children].forEach(c => c.setAttribute("aria-selected", "false")); t.setAttribute("aria-selected", "true"); render(); };
+    tabs.appendChild(t);
+  });
+
+  const scriptsFor = () => D.scripts.filter(s => brand === "all" || s.brand === brand);
+
+  function renderKpis() {
+    const s = scriptsFor();
+    const by = st => s.filter(x => x.status === st).length;
+    const clips = s.reduce((a, x) => a + (x.clips ? x.clips.length : 0), 0);
+    const kpis = [
+      { n: s.length, l: "Scripts", accent: true },
+      { n: by("POSTED"), l: "Posted" },
+      { n: by("PENDING"), l: "Pending" },
+      { n: by("DRAFT"), l: "Draft" },
+      { n: clips, l: "Clips Ready" }
+    ];
+    const wrap = $("#kpis"); wrap.innerHTML = "";
+    kpis.forEach(k => { const c = el("div", "kpi" + (k.accent ? " accent" : "")); c.append(el("div", "n", k.n), el("div", "l", esc(k.l))); wrap.appendChild(c); });
+  }
+
+  function renderPipeline() {
+    const body = $("#pipeline"); body.innerHTML = "";
+    scriptsFor().forEach(s => {
+      const tr = el("tr", "row");
+      tr.innerHTML =
+        `<td class="num">${esc(s.num)}</td>` +
+        `<td class="ttl">${esc(s.title)}<div class="muted" style="font-size:11.5px;font-weight:400">${esc(s.avatar)}</div></td>` +
+        `<td class="muted">${esc(s.format)}</td>` +
+        `<td class="muted">${esc(s.platform)}</td>` +
+        `<td><span class="cta-tag">${esc(s.cta)}</span></td>` +
+        `<td><span class="pill st-${esc(s.status)}">${esc(s.status)}</span></td>` +
+        `<td class="num">${s.clips ? s.clips.length : 0}</td>`;
+      body.appendChild(tr);
+    });
+  }
+
+  function renderVault() {
+    const v = $("#vault"); v.innerHTML = "";
+    scriptsFor().forEach((s, i) => {
+      const card = el("details", "card");
+      if (i === 0 && s.clips && s.clips.length) card.open = true;
+      const sum = el("summary");
+      sum.innerHTML =
+        `<span class="chev">▸</span><span class="s-num">${esc(s.num)}</span><span class="s-ttl">${esc(s.title)}</span>` +
+        `<span class="s-meta"><span class="cta-tag">${esc(s.cta)}</span><span class="pill st-${esc(s.status)}">${esc(s.status)}</span><span class="s-fmt">${esc(s.format)}</span></span>`;
+      card.appendChild(sum);
+      const clips = el("div", "clips");
+      if (!s.clips || !s.clips.length) {
+        clips.appendChild(el("div", "empty", "No clips scripted yet — this one's still a draft."));
+      } else {
+        s.clips.forEach(c => {
+          const box = el("div", "clip");
+          box.appendChild(el("div", "clip-head",
+            `<span class="beat">${esc(c.beat)}</span><span class="clip-id">${esc(c.clip)}·${esc(c.scene)}</span><span class="ts">${esc(c.ts)}</span><span class="cap">${esc(c.caption)}</span>`));
+          if (c.dialogue) box.appendChild(el("div", "dia", "“" + esc(c.dialogue) + "”"));
+          const pb = el("div", "promptbox");
+          const pre = el("pre", null, esc(c.prompt));
+          const btn = el("button", "copy", "Copy prompt");
+          btn.onclick = () => {
+            navigator.clipboard?.writeText(c.prompt);
+            btn.textContent = "Copied ✓"; btn.classList.add("done");
+            setTimeout(() => { btn.textContent = "Copy prompt"; btn.classList.remove("done"); }, 1400);
+          };
+          pb.append(pre, btn); box.appendChild(pb); clips.appendChild(box);
+        });
+      }
+      card.appendChild(clips); v.appendChild(card);
+    });
+  }
+
+  function renderRef() {
+    const r = D.reference, g = $("#refgrid"); g.innerHTML = "";
+
+    const elems = el("div", "refcard"); elems.appendChild(el("h3", null, "Character &amp; Product Locks"));
+    r.elements.forEach(e => {
+      const row = el("div", "elem" + (e.dead ? " dead" : ""));
+      row.innerHTML = `<div><div class="en">${esc(e.name)}</div><div class="et">${esc(e.type)}</div>${e.note ? `<div class="note">${esc(e.note)}</div>` : ""}</div>`;
+      const code = el("code", null, e.value.slice(0, 8) + "…");
+      code.title = "Click to copy full ID";
+      code.onclick = () => { navigator.clipboard?.writeText(e.value); const o = code.textContent; code.textContent = "copied ✓"; setTimeout(() => code.textContent = o, 1200); };
+      row.appendChild(code); elems.appendChild(row);
+    });
+    g.appendChild(elems);
+
+    const cta = el("div", "refcard");
+    cta.appendChild(el("h3", null, "CTA Keywords &amp; Post Timing"));
+    const cc = el("div", "chips");
+    r.ctas.forEach(c => cc.appendChild(el("span", "chip", `<b>${esc(c.word)}</b> · ${esc(c.use)}`)));
+    cta.appendChild(cc);
+    cta.appendChild(el("div", "note", "Best windows"));
+    const tc = el("div", "chips");
+    r.postTiming.forEach(t => tc.appendChild(el("span", "chip", esc(t))));
+    cta.appendChild(tc);
+    g.appendChild(cta);
+
+    const never = el("div", "refcard never");
+    never.appendChild(el("h3", null, "⛔ FTC Red List — Never Say"));
+    never.appendChild(el("div", "lead", "The avatar must never make these claims. Read RULES.md before writing."));
+    const nc = el("div", "chips");
+    r.neverSay.forEach(w => nc.appendChild(el("span", "chip", esc(w))));
+    never.appendChild(nc); g.appendChild(never);
+
+    const fol = el("div", "refcard"); fol.appendChild(el("h3", null, "Drive References"));
+    r.folders.forEach(f => {
+      const row = el("div", "elem");
+      row.innerHTML = `<div class="en" style="font-size:13px">${esc(f.name)}</div>`;
+      const code = el("code", null, f.id.slice(0, 8) + "…"); code.title = "Click to copy ID";
+      code.onclick = () => { navigator.clipboard?.writeText(f.id); const o = code.textContent; code.textContent = "copied ✓"; setTimeout(() => code.textContent = o, 1200); };
+      row.appendChild(code); fol.appendChild(row);
+    });
+    g.appendChild(fol);
+  }
+
+  function render() { renderKpis(); renderPipeline(); renderVault(); renderRef(); }
+  render();
+</script>
+</body>
+</html>
