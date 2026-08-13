@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DDEmpire Studio</title>
+<style>
+  :root {
+    --bg:#0c0d11; --panel:#15171e; --panel-2:#1b1e26; --line:#272b36; --line-2:#333949;
+    --ink:#eceef3; --dim:#9aa2b1; --faint:#69707e;
+    --gold:#c9a227; --gold-soft:#e6c85c; --green:#37c07b; --amber:#e0a92e; --slate:#5b6472; --red:#e5533c;
+    --radius:14px; --shadow:0 1px 0 rgba(255,255,255,.03), 0 14px 34px rgba(0,0,0,.42);
+    font-synthesis:none;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:radial-gradient(1000px 500px at 75% -12%, #191b23 0%, var(--bg) 55%) fixed;
+    color:var(--ink); font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.55;}
+  .wrap{max-width:800px; margin:0 auto; padding:36px 22px 90px;}
+
+  header{display:flex; align-items:center; gap:14px; margin-bottom:22px;}
+  .bolt{width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+    background:linear-gradient(160deg,var(--gold-soft),var(--gold)); color:#1a1400; font-size:23px; box-shadow:var(--shadow); flex:none;}
+  header h1{font-size:21px; margin:0; letter-spacing:-.01em;}
+  header .sub{margin:2px 0 0; font-size:12.5px; color:var(--faint); letter-spacing:.03em;}
+
+  .toolbar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+  .btn{border:1px solid var(--line-2); background:var(--panel-2); color:var(--ink); font:inherit; font-size:13px; font-weight:600;
+    padding:9px 15px; border-radius:10px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:7px;}
+  .btn:hover{border-color:var(--gold);}
+  .btn.primary{background:linear-gradient(160deg,var(--gold-soft),var(--gold)); color:#1a1400; border-color:transparent;}
+  .btn.ghost{background:transparent;}
+  .status{margin-left:auto; font-size:12.5px; color:var(--faint);}
+  .status.ok{color:var(--green);} .status.err{color:var(--red);}
+
+  .editor{display:none; margin-bottom:18px;}
+  .editor.open{display:block;}
+  textarea{width:100%; min-height:220px; resize:vertical; background:#0e1015; color:#cbd3e0; border:1px solid var(--line-2);
+    border-radius:12px; padding:14px 16px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.5px; line-height:1.6;}
+  textarea:focus{outline:none; border-color:var(--gold);}
+  .editor .row{display:flex; gap:8px; margin-top:10px;}
+
+  .meta-bar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:14px 16px; margin-bottom:18px;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);}
+  .meta-bar .b{font-size:15px; font-weight:700;}
+  .meta-bar .c{font-size:12.5px; color:var(--dim);}
+  .meta-bar .count{margin-left:auto; font-size:12px; color:var(--faint);}
+  .dot{width:5px; height:5px; border-radius:50%; background:var(--line-2);}
+
+  .script{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+    margin-bottom:14px; overflow:hidden;}
+  .s-head{display:flex; align-items:center; gap:12px; padding:16px 18px; flex-wrap:wrap;}
+  .s-num{font-variant-numeric:tabular-nums; font-weight:700; color:var(--gold-soft); font-size:14px;}
+  .s-title{font-weight:600; font-size:16px;}
+  .s-tags{margin-left:auto; display:flex; gap:7px; align-items:center; flex-wrap:wrap;}
+  .tag{font-size:11px; font-weight:700; letter-spacing:.03em; padding:3px 9px; border-radius:999px;}
+  .tag.cta{color:var(--gold-soft); background:rgba(201,162,39,.1); box-shadow:inset 0 0 0 1px rgba(201,162,39,.28);}
+  .tag.plat{color:var(--dim); background:rgba(255,255,255,.05);}
+  .st-POSTED{color:var(--green); background:rgba(55,192,123,.12); box-shadow:inset 0 0 0 1px rgba(55,192,123,.25);}
+  .st-PENDING{color:var(--amber); background:rgba(224,169,46,.12); box-shadow:inset 0 0 0 1px rgba(224,169,46,.25);}
+  .st-DRAFT{color:var(--slate); background:rgba(91,100,114,.14); box-shadow:inset 0 0 0 1px rgba(91,100,114,.3);}
+
+  /* mini timeline */
+  .rail{display:flex; gap:3px; padding:0 18px 14px;}
+  .seg{height:6px; border-radius:3px; background:linear-gradient(90deg,rgba(201,162,39,.5),rgba(201,162,39,.28)); flex:1 1 auto;}
+
+  .clips{border-top:1px solid var(--line); padding:6px 18px 16px;}
+  .clip{padding:14px 0; border-bottom:1px solid var(--line);}
+  .clip:last-child{border-bottom:0;}
+  .clip-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;}
+  .beat{font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink);
+    background:rgba(255,255,255,.06); padding:3px 8px; border-radius:5px;}
+  .cid{font-size:12px; color:var(--faint); font-variant-numeric:tabular-nums;}
+  .ct{font-size:12px; color:var(--dim); font-variant-numeric:tabular-nums;}
+  .cap{margin-left:auto; font-size:11.5px; font-weight:700; color:var(--gold-soft);}
+  .dia{font-size:13.5px; color:var(--dim); font-style:italic; margin-bottom:10px;}
+  .promptbox{background:#0e1015; border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; gap:12px; align-items:flex-start;}
+  .promptbox pre{margin:0; flex:1; font-family:ui-monospace,Menlo,monospace; font-size:11.5px; line-height:1.6; color:#b9c2d0; white-space:pre-wrap; word-break:break-word;}
+  .copy{flex:none; border:1px solid var(--line-2); background:var(--panel-2); color:var(--dim); font:inherit; font-size:11.5px; font-weight:600;
+    padding:7px 12px; border-radius:8px; cursor:pointer; white-space:nowrap; transition:.15s;}
+  .copy:hover{color:var(--ink); border-color:var(--gold);}
+  .copy.done{color:var(--green); border-color:rgba(55,192,123,.4);}
+
+  .hint{margin-top:26px; font-size:12.5px; color:var(--faint); text-align:center; line-height:1.7;}
+  .hint code{color:var(--dim); background:#0e1015; padding:1px 6px; border-radius:5px; border:1px solid var(--line);}
+  .empty{padding:40px 18px; text-align:center; color:var(--faint); font-size:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="bolt">⚡</div>
+    <div><h1>DDEmpire Studio</h1><p class="sub">Paste your script JSON → production-ready clips &amp; prompts</p></div>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn primary" id="pasteBtn">＋ Paste JSON</button>
+    <button class="btn ghost" id="exampleBtn">Load example</button>
+    <button class="btn ghost" id="downloadBtn">↓ Download</button>
+    <span class="status" id="status"></span>
+  </div>
+
+  <div class="editor" id="editor">
+    <textarea id="input" spellcheck="false" placeholder="Paste your script JSON here…"></textarea>
+    <div class="row">
+      <button class="btn primary" id="loadBtn">Load</button>
+      <button class="btn ghost" id="cancelBtn">Cancel</button>
+    </div>
+  </div>
+
+  <div id="out"></div>
+
+  <p class="hint">
+    Schema: <code>{ brand, character, scripts:[ { id, title, platform, cta, status, clips:[ { id, beat, start, end, caption, dialogue, prompt } ] } ] }</code><br/>
+    Fields are flexible — anything missing just renders empty. See <code>SCHEMA.md</code> for the full spec.
+  </p>
+</div>
+
+<script>
+  const $ = s => document.querySelector(s);
+  const el = (t,c,h)=>{const n=document.createElement(t); if(c)n.className=c; if(h!=null)n.innerHTML=h; return n;};
+  const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  const EXAMPLE = {
+    brand: "MD Klean",
+    character: "Dr. Becky 4.0",
+    scripts: [
+      { id: "001", title: "Signs of a Sluggish Liver", platform: "IG Reels", cta: "FIX", status: "DRAFT",
+        clips: [
+          { id: "C1·S1", beat: "HOOK", start: "0:00", end: "0:05", caption: "HOW MANY OF THESE DO YOU HAVE?",
+            dialogue: "This is a sign your liver's backed up. So is this. And this — tired for no reason, bloated by noon, breaking out like a teenager again.",
+            prompt: "Dr. Becky in a bright home kitchen, morning window light from left, white marble counter. 0:00-0:05 HOOK: Leans toward lens, eyebrows raised, right hand points at viewer, lips open wide on HOW MANY. Handheld micro-shake. Visible pores, natural sebum sheen, no beauty filter. 9:16. 15s. Veo 3. Natural room tone. 2-second freeze hold at end. Hard cut. CAPTION: HOW MANY OF THESE DO YOU HAVE?" },
+          { id: "C1·S3", beat: "REMEDY", start: "0:09", end: "0:13", caption: "WHAT GRANDMA USED",
+            dialogue: "Before there was a pill for everything, people used this — a castor oil pack over your liver, forty-five minutes before bed.",
+            prompt: "Dr. Becky holds the MD Klean castor oil bottle, label facing camera. 0:09-0:13 REMEDY: Right index finger taps the label once, warm knowing smile. Handheld micro-shake. Visible pores, no beauty filter. 9:16. 15s. Veo 3. Natural room tone. Hard cut. CAPTION: WHAT GRANDMA USED" }
+        ]
+      }
+    ]
+  };
+
+  const secs = t => { if(!t) return null; const p=String(t).split(":").map(Number); return p.length===2?p[0]*60+p[1]:Number(t); };
+  let current = null;
+
+  function setStatus(msg, kind){ const s=$("#status"); s.textContent=msg||""; s.className="status"+(kind?" "+kind:""); }
+
+  function render(data){
+    current = data;
+    const out = $("#out"); out.innerHTML="";
+    const scripts = (data && data.scripts) || [];
+    if(!scripts.length){ out.appendChild(el("div","empty","No scripts yet — paste JSON or load the example.")); return; }
+
+    const bar = el("div","meta-bar");
+    bar.innerHTML = `<span class="b">${esc(data.brand||"—")}</span><span class="dot"></span><span class="c">${esc(data.character||"")}</span>`+
+      `<span class="count">${scripts.length} script${scripts.length>1?"s":""}</span>`;
+    out.appendChild(bar);
+
+    scripts.forEach(s=>{
+      const card = el("div","script");
+      const head = el("div","s-head");
+      head.innerHTML = `<span class="s-num">${esc(s.id||"")}</span><span class="s-title">${esc(s.title||"Untitled")}</span>`+
+        `<span class="s-tags">${s.cta?`<span class="tag cta">${esc(s.cta)}</span>`:""}${s.platform?`<span class="tag plat">${esc(s.platform)}</span>`:""}`+
+        `${s.status?`<span class="tag st-${esc(s.status)}">${esc(s.status)}</span>`:""}</span>`;
+      card.appendChild(head);
+
+      const clips = (s.clips)||[];
+      if(clips.length){
+        const rail = el("div","rail");
+        clips.forEach(c=>{ const d=Math.max(1,(secs(c.end)||0)-(secs(c.start)||0)||1); const seg=el("div","seg"); seg.style.flexGrow=d; rail.appendChild(seg); });
+        card.appendChild(rail);
+      }
+
+      const cw = el("div","clips");
+      if(!clips.length) cw.appendChild(el("div","empty","No clips scripted yet."));
+      clips.forEach(c=>{
+        const clip = el("div","clip");
+        const ts = (c.start||c.end)?`${esc(c.start||"")}${c.end?"–"+esc(c.end):""}`:"";
+        clip.appendChild(el("div","clip-head",
+          `${c.beat?`<span class="beat">${esc(c.beat)}</span>`:""}${c.id?`<span class="cid">${esc(c.id)}</span>`:""}`+
+          `${ts?`<span class="ct">${ts}</span>`:""}${c.caption?`<span class="cap">${esc(c.caption)}</span>`:""}`));
+        if(c.dialogue) clip.appendChild(el("div","dia","“"+esc(c.dialogue)+"”"));
+        if(c.prompt){
+          const pb=el("div","promptbox"); pb.appendChild(el("pre",null,esc(c.prompt)));
+          const btn=el("button","copy","Copy prompt");
+          btn.onclick=()=>{ navigator.clipboard&&navigator.clipboard.writeText(c.prompt); btn.textContent="Copied ✓"; btn.classList.add("done");
+            setTimeout(()=>{btn.textContent="Copy prompt"; btn.classList.remove("done");},1400); };
+          pb.appendChild(btn); clip.appendChild(pb);
+        }
+        cw.appendChild(clip);
+      });
+      card.appendChild(cw); out.appendChild(card);
+    });
+  }
+
+  function load(text){
+    try{
+      const data = JSON.parse(text);
+      render(data);
+      $("#editor").classList.remove("open");
+      const n = (data.scripts||[]).length;
+      setStatus(`Loaded ${n} script${n===1?"":"s"} ✓`,"ok");
+    }catch(e){ setStatus("Invalid JSON — "+e.message,"err"); }
+  }
+
+  $("#pasteBtn").onclick=()=>{ const ed=$("#editor"); ed.classList.toggle("open"); if(ed.classList.contains("open")){ $("#input").focus(); setStatus(""); } };
+  $("#cancelBtn").onclick=()=>{ $("#editor").classList.remove("open"); setStatus(""); };
+  $("#loadBtn").onclick=()=>{ const v=$("#input").value.trim(); if(v) load(v); else setStatus("Paste some JSON first","err"); };
+  $("#exampleBtn").onclick=()=>{ const t=JSON.stringify(EXAMPLE,null,2); $("#input").value=t; render(EXAMPLE); setStatus("Example loaded ✓","ok"); };
+  $("#downloadBtn").onclick=()=>{ if(!current){ setStatus("Nothing to download yet","err"); return; }
+    const blob=new Blob([JSON.stringify(current,null,2)],{type:"application/json"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=(current.brand||"ddempire").toLowerCase().replace(/\s+/g,"-")+"-scripts.json"; a.click(); setStatus("Downloaded ✓","ok"); };
+
+  render(EXAMPLE);
+</script>
+</body>
+</html>
