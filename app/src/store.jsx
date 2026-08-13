@@ -1,9 +1,16 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import * as backend from './backend.js';
+import { onAuth } from './supabase.js';
 
 /*
  * DD Empire Studio — local-first store.
  * Phase 1 uses localStorage. Phase 2+ swaps the persistence layer for IndexedDB
  * (video-sized assets exceed localStorage quota) behind this same API.
+ *
+ * Optional cloud sync: when Supabase is configured AND a user is signed in
+ * (backend.isBackendReady()), state is hydrated from the cloud on mount and on
+ * auth changes, and writes are mirrored to the backend fire-and-forget. With no
+ * Supabase config every backend call is a no-op and behavior is unchanged.
  */
 
 const KEY = 'ddempire_state_v1';
@@ -53,20 +60,91 @@ function load() {
 
 const StoreCtx = createContext(null);
 
+/* Merge cloud rows into a local array by id — cloud wins for matching ids. */
+function mergeById(local, cloud) {
+  if (!cloud || !cloud.length) return local;
+  const map = new Map();
+  for (const item of local) if (item && item.id != null) map.set(item.id, item);
+  for (const item of cloud) if (item && item.id != null) map.set(item.id, { ...map.get(item.id), ...item });
+  return Array.from(map.values());
+}
+
 export function StoreProvider({ children }) {
   const [state, setState] = useState(load);
+  const [syncing, setSyncing] = useState(false);
+  const [cloud, setCloud] = useState(false); // true when backend is ready (configured + signed in)
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   useEffect(() => {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* quota */ }
   }, [state]);
 
+  // Pull cloud data and merge into local state (cloud wins on id collisions).
+  const hydrate = async () => {
+    const ready = await backend.isBackendReady();
+    setCloud(ready);
+    if (!ready) return;
+    setSyncing(true);
+    try {
+      const remote = await backend.fetchAll();
+      setState(s => ({
+        ...s,
+        characters: mergeById(s.characters, remote.characters),
+        scripts: mergeById(s.scripts, remote.scripts),
+        media: mergeById(s.media, remote.media)
+      }));
+    } catch (_) { /* stay local */ } finally { setSyncing(false); }
+  };
+
+  // Push all local data up, then pull cloud down and merge.
+  const syncNow = async () => {
+    const ready = await backend.isBackendReady();
+    setCloud(ready);
+    if (!ready) return;
+    setSyncing(true);
+    try {
+      const s = stateRef.current;
+      await Promise.allSettled([
+        ...s.characters.map(c => backend.upsertCharacter(c)),
+        ...s.scripts.map(sc => backend.upsertScript(sc)),
+        ...s.media.map(m => backend.upsertMedia(m))
+      ]);
+      const remote = await backend.fetchAll();
+      setState(cur => ({
+        ...cur,
+        characters: mergeById(cur.characters, remote.characters),
+        scripts: mergeById(cur.scripts, remote.scripts),
+        media: mergeById(cur.media, remote.media)
+      }));
+    } catch (_) { /* swallow */ } finally { setSyncing(false); }
+  };
+
+  // Hydrate on mount, and re-hydrate whenever auth state changes.
+  useEffect(() => {
+    hydrate();
+    const off = onAuth(() => { hydrate(); });
+    return off;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fire-and-forget backend write; never throws, never blocks the UI.
+  const push = (fn, arg) => { try { Promise.resolve(fn(arg)).catch(() => {}); } catch (_) { /* ignore */ } };
+
   const api = {
     ...state,
-    addCharacter: (c) => setState(s => ({ ...s, characters: [...s.characters, c] })),
-    updateCharacter: (id, patch) => setState(s => ({ ...s, characters: s.characters.map(c => c.id === id ? { ...c, ...patch } : c) })),
-    addScript: (sc) => setState(s => ({ ...s, scripts: [...s.scripts, sc] })),
-    importScripts: (arr) => setState(s => ({ ...s, scripts: [...s.scripts, ...arr] })),
-    addMedia: (m) => setState(s => ({ ...s, media: [...s.media, m] })),
+    syncing,
+    cloud,
+    syncNow,
+    addCharacter: (c) => { setState(s => ({ ...s, characters: [...s.characters, c] })); push(backend.upsertCharacter, c); },
+    updateCharacter: (id, patch) => setState(s => {
+      const next = s.characters.map(c => c.id === id ? { ...c, ...patch } : c);
+      const updated = next.find(c => c.id === id);
+      if (updated) push(backend.upsertCharacter, updated);
+      return { ...s, characters: next };
+    }),
+    addScript: (sc) => { setState(s => ({ ...s, scripts: [...s.scripts, sc] })); push(backend.upsertScript, sc); },
+    importScripts: (arr) => { setState(s => ({ ...s, scripts: [...s.scripts, ...arr] })); arr.forEach(sc => push(backend.upsertScript, sc)); },
+    addMedia: (m) => { setState(s => ({ ...s, media: [...s.media, m] })); push(backend.upsertMedia, m); },
     reset: () => setState(SEED),
     replaceAll: (next) => setState(next)
   };
