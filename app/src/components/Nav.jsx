@@ -4,6 +4,7 @@ const links = [
   { to: '/characters', label: 'Characters' },
   { to: '/studio', label: 'Studio' },
   { to: '/scripts', label: 'Scripts' },
+  { to: '/storyboard', label: 'Storyboard' },
   { to: '/timeline', label: 'Timeline' },
   { to: '/library', label: 'Library' }
 ];

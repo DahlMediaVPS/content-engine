@@ -1,12 +1,25 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useStore } from '../store.jsx';
+import { useStore, genId } from '../store.jsx';
 
 export default function Characters() {
-  const { characters, scripts } = useStore();
+  const { characters, scripts, updateCharacter } = useStore();
   const [sel, setSel] = useState(characters[0]?.id || null);
+  const [imgName, setImgName] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
   const active = characters.find(c => c.id === sel);
   const activeScripts = scripts.filter(s => s.characterId === sel);
+
+  const addRefImage = () => {
+    if (!active || !imgName.trim()) return;
+    const next = [...(active.refImages || []), { id: genId(), name: imgName.trim(), url: imgUrl.trim() }];
+    updateCharacter(active.id, { refImages: next });
+    setImgName(''); setImgUrl('');
+  };
+  const removeRefImage = (id) => {
+    if (!active) return;
+    updateCharacter(active.id, { refImages: (active.refImages || []).filter(r => r.id !== id) });
+  };
 
   return (
     <div className="wrap">
@@ -56,6 +69,29 @@ export default function Characters() {
               <div className="panel" style={{ padding: '12px 14px', background: 'var(--panel-2)' }}>
                 <div className="faint" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '.05em' }}>Scripts</div>
                 <div style={{ fontSize: 18, fontWeight: 700, marginTop: 2 }}>{activeScripts.length}</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 20 }}>
+              <div className="h-eyebrow" style={{ marginBottom: 8 }}>Reference images <span className="faint" style={{ textTransform: 'none', letterSpacing: 0, fontWeight: 400 }}>— named, baked into every prompt</span></div>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+                {(active.refImages || []).map(r => (
+                  <div key={r.id} style={{ width: 88 }}>
+                    <div style={{ width: 88, height: 110, borderRadius: 8, overflow: 'hidden', background: 'var(--panel-2)', boxShadow: 'inset 0 0 0 1px var(--line)', display: 'grid', placeItems: 'center' }}>
+                      {r.url ? <img src={r.url} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span className="faint" style={{ fontSize: 11 }}>no image</span>}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                      <span className="mono" style={{ fontSize: 11, color: 'var(--gold-soft)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.name}</span>
+                      <button className="btn ghost" style={{ padding: '1px 6px', fontSize: 11, marginLeft: 'auto' }} onClick={() => removeRefImage(r.id)}>✕</button>
+                    </div>
+                  </div>
+                ))}
+                {(active.refImages || []).length === 0 && <div className="faint" style={{ fontSize: 13 }}>No reference images yet — add named shots (e.g. “{active.name} img1”).</div>}
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <input value={imgName} onChange={e => setImgName(e.target.value)} placeholder={`${active.name} img${(active.refImages?.length || 0) + 1}`} style={{ flex: '1 1 130px' }} />
+                <input value={imgUrl} onChange={e => setImgUrl(e.target.value)} placeholder="image URL (optional)" style={{ flex: '2 1 200px' }} />
+                <button className="btn" onClick={addRefImage}>＋ Add</button>
               </div>
             </div>
 

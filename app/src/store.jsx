@@ -21,19 +21,19 @@ const SEED = {
       id: 'greg', name: 'Greg', version: '1.0', brand: 'MD Klean', status: 'ACTIVE',
       engines: 'Veo 3 · Nano Banana Pro',
       look: 'Late 50s man, grey wavy hair, weathered denim shirt over grey tee, thin cross necklace, warm kitchen. Real skin texture, natural — not polished.',
-      elementId: 'greg-1.0', accent: '#5b9dd9', scripts: []
+      elementId: 'greg-1.0', accent: '#5b9dd9', refImages: [], scripts: []
     },
     {
       id: 'becky', name: 'Dr. Becky', version: '4.0', brand: 'MD Klean', status: 'ACTIVE',
       engines: 'Veo 3 · Nano Banana Pro · Kling 3.0',
       look: 'Mid-50s, warm hazel eyes, silver-grey wavy hair, real skin texture, white linen shirt, thin gold chain — natural-medicine practitioner, NOT clinical.',
-      elementId: '6c62aea9-6002-4b10-b359-b383e99d47f7', accent: '#c9a227', scripts: ['001']
+      elementId: '6c62aea9-6002-4b10-b359-b383e99d47f7', accent: '#c9a227', refImages: [], scripts: ['001']
     },
     {
       id: 'nicole', name: 'Nicole', version: '4.0', brand: 'Glassier Skin', status: 'ACTIVE',
       engines: 'Veo 3 · Nano Banana Pro',
       look: 'Late 30s, dark wavy shoulder-length hair, distinctly green eyes, olive-warm skin, strong brows, natural bare face, lavender-pink gel nails.',
-      elementId: 'nicole-4.0', accent: '#b06ab3', scripts: []
+      elementId: 'nicole-4.0', accent: '#b06ab3', refImages: [], scripts: []
     }
   ],
   scripts: [
@@ -47,13 +47,28 @@ const SEED = {
       ]
     }
   ],
-  media: []
+  media: [],
+  environments: [
+    { id: 'env-kitchen', name: 'Home Kitchen', description: 'Bright home kitchen, morning window light from left, white marble counter, small plant, light wood accents.' },
+    { id: 'env-porch', name: 'Porch / Driveway', description: 'Front porch and driveway, warm late-afternoon sun, suburban home, natural outdoor light, handheld feel.' },
+    { id: 'env-mountain', name: 'Mountain Roadside', description: 'Roadside pullout in the mountains, pine trees, crisp daylight, distant peaks, natural outdoor light.' }
+  ],
+  storyboards: [
+    {
+      id: 'sb-001', name: 'Sluggish Liver — 3 frames', characterId: 'becky', environmentId: 'env-kitchen',
+      frames: [
+        { id: 'f1', action: 'Leans toward lens, right hand points at viewer, warm urgent friend energy', dialogue: "This is a sign your liver's backed up. So is this. And this.", caption: 'HOW MANY OF THESE DO YOU HAVE?', imageUrl: '', prompt: '' },
+        { id: 'f2', action: 'Holds the MD Klean bottle to camera, taps the label once, warm knowing smile', dialogue: 'Before there was a pill for everything, people used this.', caption: 'WHAT GRANDMA USED', imageUrl: '', prompt: '' },
+        { id: 'f3', action: 'Close-up, index finger points at lens, holds two seconds then lowers', dialogue: 'Comment FIX and I will send you the full protocol. Follow me first.', caption: 'COMMENT FIX + FOLLOW', imageUrl: '', prompt: '' }
+      ]
+    }
+  ]
 };
 
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) return { ...SEED, ...JSON.parse(raw) }; // default any newly-added keys
   } catch (_) { /* ignore */ }
   return SEED;
 }
@@ -145,6 +160,11 @@ export function StoreProvider({ children }) {
     addScript: (sc) => { setState(s => ({ ...s, scripts: [...s.scripts, sc] })); push(backend.upsertScript, sc); },
     importScripts: (arr) => { setState(s => ({ ...s, scripts: [...s.scripts, ...arr] })); arr.forEach(sc => push(backend.upsertScript, sc)); },
     addMedia: (m) => { setState(s => ({ ...s, media: [...s.media, m] })); push(backend.upsertMedia, m); },
+    addEnvironment: (e) => setState(s => ({ ...s, environments: [...(s.environments || []), e] })),
+    updateEnvironment: (id, patch) => setState(s => ({ ...s, environments: (s.environments || []).map(e => e.id === id ? { ...e, ...patch } : e) })),
+    addStoryboard: (sb) => setState(s => ({ ...s, storyboards: [...(s.storyboards || []), sb] })),
+    updateStoryboard: (id, patch) => setState(s => ({ ...s, storyboards: (s.storyboards || []).map(x => x.id === id ? { ...x, ...patch } : x) })),
+    deleteStoryboard: (id) => setState(s => ({ ...s, storyboards: (s.storyboards || []).filter(x => x.id !== id) })),
     reset: () => setState(SEED),
     replaceAll: (next) => setState(next)
   };
@@ -158,3 +178,20 @@ export const useStore = () => {
 };
 
 export const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+/*
+ * Bake a consistent 9:16 prompt from a character (+ its named reference images),
+ * a reusable environment, and a single storyboard frame (action + dialogue + caption).
+ * This is what keeps characters and backgrounds consistent across frames.
+ */
+export function buildFramePrompt(character, environment, frame) {
+  const refs = (character?.refImages || []).map(r => r?.name).filter(Boolean);
+  const refLine = refs.length ? ` Character reference images: ${refs.join(', ')} — match face, hair, wardrobe exactly.` : '';
+  const env = environment?.description || environment?.name || '';
+  const look = character?.look || '';
+  const action = frame?.action || '';
+  const dia = frame?.dialogue ? ` They say: "${frame.dialogue}".` : '';
+  const cap = frame?.caption ? ` CAPTION: ${frame.caption}` : '';
+  return `${character?.name || 'Character'} — ${look}${refLine} ${env} ${action}.${dia} Visible pores, natural sebum sheen, no beauty filter, real texture. 9:16. Veo 3. Natural room tone. Hard cut.${cap}`
+    .replace(/\s+/g, ' ').trim();
+}

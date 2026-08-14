@@ -15,7 +15,9 @@ export default function Studio() {
   const [gen, setGen] = useState({ busy: false, progress: 0, url: '', error: '' });
   const connected = hasVeoKey();
 
-  const prompt = c ? `${c.look} ${f.environment}. ${f.camera}. ${f.dialogue ? `They say: "${f.dialogue}". ` : ''}Visible pores, natural sebum sheen, no beauty filter. ${f.aspect}. ${f.duration}s. Veo 3. Natural room tone. Hard cut.` : '';
+  const refs = c ? (c.refImages || []).map(r => r.name).filter(Boolean) : [];
+  const refLine = refs.length ? ` Character reference images: ${refs.join(', ')} — match face, hair, wardrobe exactly.` : '';
+  const prompt = c ? `${c.look}${refLine} ${f.environment}. ${f.camera}. ${f.dialogue ? `They say: "${f.dialogue}". ` : ''}Visible pores, natural sebum sheen, no beauty filter. ${f.aspect}. ${f.duration}s. Veo 3. Natural room tone. Hard cut.` : '';
 
   const run = async () => {
     setGen({ busy: true, progress: 0.02, url: '', error: '' });

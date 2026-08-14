@@ -5,6 +5,7 @@ import Characters from './pages/Characters.jsx';
 import Create from './pages/Create.jsx';
 import Studio from './pages/Studio.jsx';
 import Scripts from './pages/Scripts.jsx';
+import Storyboard from './pages/Storyboard.jsx';
 import Timeline from './pages/Timeline.jsx';
 import Library from './pages/Library.jsx';
 import Settings from './pages/Settings.jsx';
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/create" element={<Create />} />
         <Route path="/studio" element={<Studio />} />
         <Route path="/scripts" element={<Scripts />} />
+        <Route path="/storyboard" element={<Storyboard />} />
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/library" element={<Library />} />
         <Route path="/settings" element={<Settings />} />
