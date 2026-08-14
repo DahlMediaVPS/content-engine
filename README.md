@@ -16,6 +16,7 @@ Other creators built audiences on "the industry doesn't want you to know this" c
 | `funnels/` | Product funnel maps — what each video sells and how |
 | `hooks/` | The hook backlog — debunk targets and flip angles, scored |
 | `engine/` | The machinery: scraper spec, consistency rules, script QA gate |
+| `affiliates/` | The distribution multiplier: template system + playbook for ~80 affiliates who self-insert via Veo 3 |
 
 ## The production loop
 

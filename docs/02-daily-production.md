@@ -28,6 +28,10 @@ Adjust weekly based on account performance — reallocate quota toward whatever'
 - One hook = one video. Never stack two debunks in one script to save a slot.
 - Every 10th video slot is reserved for a **pure flip** (no debunk) to maintain the 2:1 ratio.
 
+## Affiliate template lane (parallel to daily video production)
+
+Alongside owned-channel videos, the intake pipeline (`affiliates/intake-pipeline.md`) converts the video library into affiliate templates in batch sessions — target 5–10 QA'd templates per session. Owned channels prove a format works; the affiliate feed multiplies it across ~80 faces. A hook that wins on Greg #2's account is a template candidate the same week.
+
 ## Weekly loop
 
 - Review per-account retention + CTA click data. Kill formats that are dying, double winners.
