@@ -112,9 +112,9 @@ export async function fetchAll() {
   if (!c) return { characters: [], scripts: [], media: [] };
   try {
     const [ch, sc, md] = await Promise.all([
-      c.sb.from('characters').select('*'),
-      c.sb.from('scripts').select('*'),
-      c.sb.from('media').select('*')
+      c.sb.from('dde_characters').select('*'),
+      c.sb.from('dde_scripts').select('*'),
+      c.sb.from('dde_media').select('*')
     ]);
     return {
       characters: (ch.data || []).map(rowToChar),
@@ -132,7 +132,7 @@ export async function upsertCharacter(character) {
   const c = await ctx();
   if (!c) return null;
   try {
-    const { data, error } = await c.sb.from('characters')
+    const { data, error } = await c.sb.from('dde_characters')
       .upsert(clean(charToRow(character, c.uid))).select().single();
     if (error) return null;
     return data;
@@ -143,7 +143,7 @@ export async function deleteCharacter(id) {
   const c = await ctx();
   if (!c) return null;
   try {
-    await c.sb.from('characters').delete().eq('id', id);
+    await c.sb.from('dde_characters').delete().eq('id', id);
     return true;
   } catch { return null; }
 }
@@ -152,7 +152,7 @@ export async function upsertScript(script) {
   const c = await ctx();
   if (!c) return null;
   try {
-    const { data, error } = await c.sb.from('scripts')
+    const { data, error } = await c.sb.from('dde_scripts')
       .upsert(clean(scriptToRow(script, c.uid))).select().single();
     if (error) return null;
     return data;
@@ -163,7 +163,7 @@ export async function upsertMedia(media) {
   const c = await ctx();
   if (!c) return null;
   try {
-    const { data, error } = await c.sb.from('media')
+    const { data, error } = await c.sb.from('dde_media')
       .upsert(clean(mediaToRow(media, c.uid))).select().single();
     if (error) return null;
     return data;
@@ -185,7 +185,7 @@ export async function saveTimeline(project) {
       track_state: project?.trackState ?? {},
       updated_at: new Date().toISOString()
     });
-    const { data, error } = await c.sb.from('timeline_projects')
+    const { data, error } = await c.sb.from('dde_timeline_projects')
       .upsert(row, { onConflict: 'user_id,name' }).select().single();
     if (error) return null;
     return data;
@@ -196,7 +196,7 @@ export async function loadTimeline() {
   const c = await ctx();
   if (!c) return null;
   try {
-    const { data } = await c.sb.from('timeline_projects')
+    const { data } = await c.sb.from('dde_timeline_projects')
       .select('*').eq('name', TIMELINE_NAME).limit(1).maybeSingle();
     if (!data) return null;
     return { name: data.name, tracks: data.tracks ?? {}, trackState: data.track_state ?? {} };
@@ -210,10 +210,10 @@ export async function uploadClip(blob, name) {
   if (!c) return null;
   try {
     const path = `${c.uid}/${name}`;
-    const { error } = await c.sb.storage.from('clips')
+    const { error } = await c.sb.storage.from('dde-clips')
       .upload(path, blob, { upsert: true, contentType: blob?.type || 'video/mp4' });
     if (error) return null;
-    const { data } = await c.sb.storage.from('clips')
+    const { data } = await c.sb.storage.from('dde-clips')
       .createSignedUrl(path, 60 * 60 * 24 * 7); // 7 days
     return data?.signedUrl || null;
   } catch { return null; }
