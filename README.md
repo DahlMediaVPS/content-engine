@@ -94,3 +94,17 @@ Show me before and after screenshots.
 | Fonts render wrong live | "Wire the web fonts properly for production" (preload + `font-display: swap`), not just in preview. |
 
 **Rule of thumb:** taste comes from the skills you install and the references you give — not from asking nicely.
+
+## Video editing (HyperFrames + Whisper)
+
+[HyperFrames](https://github.com/heygen-com/hyperframes) (Apache-2.0, by HeyGen) turns HTML + animations into MP4s, so Claude can build edits — captions, title cards, lower-thirds, overlays on talking-head clips — and render them. Its skills are vendored in `.claude/skills/` (`hyperframes`, `talking-head-recut`, `embedded-captions`, `motion-graphics`, …).
+
+```bash
+npm run setup:video                          # render browser + whisper.cpp + model
+npx hyperframes init my-video --resolution portrait --video clip.mp4   # auto-transcribes with Whisper
+npx hyperframes lint && npx hyperframes render -o out.mp4
+```
+
+Whisper here is **transcription of your video's audio** (for word-timed captions), not voice chat. `demo/video-title-card/` is a working 1080×1920 example (`render.mp4`).
+
+Note: in Claude Code on the web, the Whisper model download needs `huggingface.co` in the environment's allowed domains, and compositions should load GSAP locally (as the demo does) rather than from a CDN.
