@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Content engine with the Web Design Killer skill stack (taste + impeccable-design + emil-kowalski-design + design-review).",
   "scripts": {
-    "screenshot": "node scripts/screenshot.mjs"
+    "screenshot": "node scripts/screenshot.mjs",
+    "render-promo": "node scripts/render-promo.mjs"
   },
   "devDependencies": {
     "playwright": "^1.48.0"
