@@ -94,3 +94,13 @@ Show me before and after screenshots.
 | Fonts render wrong live | "Wire the web fonts properly for production" (preload + `font-display: swap`), not just in preview. |
 
 **Rule of thumb:** taste comes from the skills you install and the references you give — not from asking nicely.
+
+---
+
+## Reel pipeline (multi-agent)
+
+Reverse-engineer a reel, rebuild it with one of our characters, and prepare the post for every platform — run by one orchestrator skill and six stage agents. See [`pipeline/README.md`](pipeline/README.md).
+
+```
+/reel-pipeline <reel URL> <character>
+```

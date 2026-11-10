@@ -1,0 +1,22 @@
+{
+  "_note": "One entry per character/account. Replace every REPLACE_ME before running the pipeline. No passwords or API keys in this file.",
+  "defaults": {
+    "platforms": ["instagram", "facebook", "youtube", "x"],
+    "cta_keyword": "RECIPES",
+    "auto_dm": "Link to all recipes + castor oil bonus. Set up once per account in the DM tool; triggered by the comment keyword.",
+    "post_times": ["11:30", "18:30"],
+    "timezone": "REPLACE_ME"
+  },
+  "characters": {
+    "example-character": {
+      "brand": "skincare",
+      "instagram_handle": "REPLACE_ME",
+      "character_lock": "REPLACE_ME - the exact word-for-word appearance description used in every image and video prompt",
+      "character_ref_image": "REPLACE_ME - Drive link or path",
+      "voice": "REPLACE_ME - how they talk, catchphrases, what they never say",
+      "product": "organic castor oil",
+      "product_refs": ["REPLACE_ME - real packaging photo"],
+      "drive_folder": "REPLACE_ME"
+    }
+  }
+}
