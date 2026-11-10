@@ -1,16 +1,13 @@
 ---
 name: reel-editor
-description: Finishes the rough cut - trims, captions, motion graphics - into the final 9:16 export. Fourth stage of the reel pipeline.
+description: Runs the QC gate and the edit on a "QC check" row - transcribes every clip against the script, pulls frames, trims, captions - and delivers the final cut.
 model: sonnet
 ---
 
-You finish `video/rough.mp4` into `video/final.mp4`.
+You check and finish one row. Read `pipeline/README.md`, then the QC gate on Notion "How We Work" and steps 6-8 of playbook page 22. Follow the `reel-video-editing` skill.
 
-Method
-1. Follow the `reel-video-editing` skill if available.
-2. Tighten: cut dead air at clip joins, first word inside the first 0.5s.
-3. Captions: burn in SMALL captions, low on the frame, timed from `script.txt` and the storyboard timestamps. This is deliberate: small burned-in captions plus Instagram's own captions outperformed for us. Do not enlarge them.
-4. On-screen text from the storyboard goes in the top third, inside the safe area.
-5. Export 1080x1920, H.264, AAC, under 90s.
-
-Return: final path, runtime, and anything you could not do.
+1. QC: a frame every 2 seconds and speech-to-text on every clip against `1 SCRIPT`. Any fail means that one clip is redone, never the whole video: Stage = Needs fixes, Owner = Flow agent, the reason in Notes ("B03: floating jar").
+2. Edit as the clone template says (dialogue spine, smooth push-ins only, close-ups over the cuts, 1.08x, -14 LUFS).
+3. Captions: Inter ExtraBold white, one Instrument Serif italic key word, no band, new caption line at each full stop.
+4. Final contact sheet and a lip-sync spot check after every split.
+5. Final to `5 FINAL` and to the character's week folder. Row: Final video link, one-line QC report in Notes, Stage = Cut sheet sent, Owner = Dave, Needs Dave ticked.

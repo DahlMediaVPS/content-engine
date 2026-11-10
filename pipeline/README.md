@@ -1,29 +1,35 @@
 # Reel pipeline
 
-Source reel in, scheduled post out. One orchestrator (`/reel-pipeline`), six stage agents in `.claude/agents/`.
+The board is the truth: one video = one row in the Notion **Production Tracker**. Agents never message each other. Each one picks up rows at its Stage, does its job, files to the row's Drive job folder, and moves the Stage on. This repo holds the brief for each lane; the detailed how-to stays in the Notion playbook so there is one copy of it.
 
-```
-trend-scout ─► reel-analyst ─► [you approve script] ─► image-director ─► video-producer ─► reel-editor ─► publisher ─► [you approve post]
-```
+## The relay
+
+| Stage on the row | Lane (brief) | Runs | Moves the row to |
+|---|---|---|---|
+| (none) | `trend-scout` | cloud | adds rows at **In INBOX** |
+| In INBOX | `reel-planner` | cloud | **Ready to build**, Needs Dave ticked |
+| Ready to build | `flow-builder` | desktop browser (Flow) | **Building** → **QC check** |
+| QC check | `reel-editor` | desktop or cloud | **Cut sheet sent** / **Needs fixes** |
+| Cut sheet sent | Dave | — | **Approved** |
+| Approved | `publisher` | desktop browser | **Scheduled** → **Posted**, 48h numbers |
+| Posted (English) | `spanish-dubber` | cloud | new Spanish row at **Approved** |
+
+Stuck at any point: Stage = Stuck, one line in "Stuck because", tick Needs Dave.
+
+## Where things are
+
+- Production Tracker data source: `collection://74f6b40e-5735-4747-974c-d1f033aeba79`
+- Rules every lane reads first: Notion "How We Work — Read This First" and "START HERE — how a video moves"
+- Playbook: Notion "AI Video Playbook (Flow)" — page 15 (reverse-engineering), 22 (clone template, approved Nov 2 2026), 14 (format lock), 17 (posting and closes), "Posting Rules"
+- Drive: `01 INBOX — To Remake` for sources; `🎬 VIDEO PIPELINE > 04 BUILD FILES` for job folders (copy `_TEMPLATE — copy me`, name `CHARACTER TOPIC MMDD`, five subfolders); `🎭 CHARACTERS > Character > month > week` for finished videos
 
 ## Run it
 
-```
-/reel-pipeline https://www.instagram.com/reel/XXXX example-character
-/reel-pipeline find 5 reels for example-character
-```
+`/reel-pipeline` works the board once: every row sitting at a stage this session can do gets done and moved on. `/reel-pipeline plan` does only the planning stage.
 
-Each job gets a folder in `pipeline/jobs/` holding the breakdown, storyboard, script, images, video and post copy, so a job can be stopped and resumed without redoing paid steps.
+## Hard rules (from Notion, repeated because they matter)
 
-## Set up once
-
-1. Fill in `pipeline/accounts.json` — one entry per character (8 Instagram characters, personal brand, app characters).
-2. Auto-DM: in your DM tool, one automation per account — comment contains the `cta_keyword` → send the recipes link + castor oil bonus. Every caption the pipeline writes uses that same keyword, so there is nothing to schedule per post.
-3. Scheduler: connect one that has an API/connector for multi-account posting (Publer's API needs its Business plan). Until then the publisher leaves `publish.json` ready to paste.
-
-## Keeping token use down
-
-- Stage agents run on cheaper models (scout and publisher on the smallest, the rest mid-tier); only the orchestrator runs on the session model.
-- Agents pass files, not chat. The orchestrator only sees a few lines per stage.
-- Finished stages are skipped on resume.
-- Do not fan out dozens of agents for this. Six stages per reel is the whole job; batch by running several reels side by side.
+- Nothing posts, sends or spends without Dave's OK. Dave sees the storyboard before any clip is generated.
+- Clone shot for shot; swap only the character and the room. Script word for word.
+- No captions, social UI or logos carried into generated images.
+- One source a day, rebuilt across the characters, one row per character, each in their own room and Flow project.
