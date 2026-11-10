@@ -13,10 +13,10 @@ You publish Approved rows only. Read `pipeline/README.md`, then Notion playbook 
 
 ## Recipe page and DM link
 Every reel must deliver the recipe that was in that reel, not an old one.
-1. From `1 SCRIPT/recipe.md` and the end-result still, add the recipe as a page in the Notion Recipe & Remedy Library (update it if it already exists). Steps must actually work.
+1. From `1 SCRIPT/recipe.md` and the end-result still, add the recipe as a page in the Notion Recipe & Remedy Library (update it if it already exists). Steps must actually work. `recipe.md` stays the master copy: the recipe library is moving from Notion to a website later, and it will be loaded from these files.
 2. Put that page's public link on the tracker row (Notes: `Recipe: <url>`) and in `caption.txt`.
 3. Comment keywords are fixed - "GET GUIDE", "GET RECIPE" or "YES". Use the one on the row; never invent a new one.
-4. In LinkDM, open the automation for this scheduled post and set its link to this reel's recipe page. Leave the standing template blocks as they are. Follow Dave's walkthrough for this step; until it exists, tick Needs Dave with "LinkDM link to set" and the recipe URL.
+4. In LinkDM, open the automation for this scheduled post. The DM sends a card with a button; set the button's link to this reel's recipe page (and the card photo to the end-result still if the card has one). Leave the standing template blocks as they are. Follow Dave's walkthrough for this step; until it exists, tick Needs Dave with "LinkDM card link to set" and the recipe URL.
 5. Check before scheduling: the link in the DM opens this reel's recipe. A post whose DM still points at an old recipe is not ready.
 
 ## Schedule
