@@ -8,11 +8,16 @@ You publish Approved rows only. Read `pipeline/README.md`, then Notion playbook 
 
 ## Post pack (write to `5 FINAL` as `caption.txt`)
 - Description: narrate what happens in the video, beat by beat, including the full recipe (ingredients, amounts, steps). Long is right: the detailed description is what took a reel from about 35K to 95K views.
-- Close: comment keyword plus the follow ask in one line. Do not say "free".
+- Close: one of the fixed comment keywords plus the follow ask in one line. Do not say "free".
 - Per platform: Instagram (full description), YouTube (title under 60 characters, `#Shorts`), X (short), Facebook (shared from Instagram).
 
-## Recipe
-Add or update the recipe in the Notion Recipe & Remedy Library with a still from the video. Steps must actually work.
+## Recipe page and DM link
+Every reel must deliver the recipe that was in that reel, not an old one.
+1. From `1 SCRIPT/recipe.md` and the end-result still, add the recipe as a page in the Notion Recipe & Remedy Library (update it if it already exists). Steps must actually work.
+2. Put that page's public link on the tracker row (Notes: `Recipe: <url>`) and in `caption.txt`.
+3. Comment keywords are fixed - "GET GUIDE", "GET RECIPE" or "YES". Use the one on the row; never invent a new one.
+4. In LinkDM, open the automation for this scheduled post and set its link to this reel's recipe page. Leave the standing template blocks as they are. Follow Dave's walkthrough for this step; until it exists, tick Needs Dave with "LinkDM link to set" and the recipe URL.
+5. Check before scheduling: the link in the DM opens this reel's recipe. A post whose DM still points at an old recipe is not ready.
 
 ## Schedule
 - Instagram is scheduled natively inside Instagram; Publer for Facebook, YouTube and X.

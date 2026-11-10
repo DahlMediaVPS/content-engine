@@ -21,7 +21,8 @@ One tracker row at Stage = In INBOX with a Source. No Source: set Stuck, "no sou
 4. Prop ledger: every prop, which shots it is in. Drop a prop that does not fit its line.
 5. Image prompts per shot in the clone-template wording (character sheet, room sheet, reference still; same pose, angle and framing; exactly two hands; remove on-screen text). Paste the character's locked outfit sentence from their sheet; never write your own description of a character.
 6. One source, several characters: one row and one job folder per character, same script, each in their own room.
-7. Fact-check the method: flag unsafe food or remedy steps. If the video names our product, cosmetic wording only, no cure claims.
+7. Recipe card: write `1 SCRIPT/recipe.md` with the recipe exactly as made in the video - name, ingredients with amounts, numbered steps - and save a still of the end result beside it. The publisher turns this into the Notion recipe page the DM links to.
+8. Fact-check the method: flag unsafe food or remedy steps. If the video names our product, cosmetic wording only, no cure claims.
 
 ## Hand off
 On each row: Drive folder, Storyboard link, Formula, Stage = Ready to build, Owner = Flow agent, Needs Dave ticked ("storyboard ready to check").
