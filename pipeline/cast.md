@@ -36,4 +36,4 @@ Eight references from Dave on Nov 11 (images `ai-dave-*` in `pipeline/cast/`; th
 Look: man in his fifties, short swept-back blond-grey hair, light grey stubble, blue eyes; black crew-neck t-shirt, black trousers, light-blue running shoes with orange soles; holds a small black handheld microphone with a red cord.
 Lounge (heads 1 to 4 and both layout stills): warm room, paper-lantern pendant lamp, egg-shaped table lamp, walnut sideboard with a black-ink botanical print and a blue abstract print, potted olive tree, small wall speaker, blue neon strip light in some shots, sheer striped curtains, brown leather armchair on a black metal frame, grey side table with a small astronaut figure, grey textured carpet.
 Other rooms: head 5 is a close portrait against a soft warm bokeh background, no mic. Head 6 is a bright study (bookshelves, wooden desk, window with white sheer curtains, beige sofa). Use them only for a standalone hook, never mixed with the lounge in one video.
-Voice: no AI Dave voice clip is listed anywhere yet.
+Voice: automatic inside the Flow project "David Ai Systems" (Dave's own voice). Build AI Dave only in that project.

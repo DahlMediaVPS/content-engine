@@ -21,7 +21,7 @@ Layout (how the motion graphics should look):
 4. The screen layer is built in Remotion on top of the finished Dave clip: a dark rounded panel, slight perspective tilt, warm edge glow, 16:9 content inside. Content is a real screen recording of the tool being discussed, or a Remotion UI card or infographic that Dave owns. Do not paste frames from the source videos.
 5. Headline: small step label ("01 / ADD YOUR PROMPT") in orange or cream, then the title big, white, heavy uppercase sans, 2 to 4 words. One block per beat, clear of Dave's face, inside the safe area.
 6. Captions: the usual two layers (main readable captions plus the tiny corner track).
-7. AI Dave needs a voice clip for Flow. None is listed. The builder stops and asks if he has none; never borrow another character's voice.
+7. Voice: inside the Flow project "David Ai Systems" the video model uses Dave's voice automatically. Build AI Dave clips only in that project; no voice clip is attached.
 8. Say only what Dave can deliver. The close and the comment keyword come from the pack.
 
 ## Pack per video (written once the breakdown PDFs are in)
