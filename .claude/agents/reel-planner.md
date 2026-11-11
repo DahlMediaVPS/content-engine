@@ -8,23 +8,31 @@ You plan one source video for one or more characters. You do not generate clips.
 
 Read `pipeline/README.md`, then Notion playbook page 15 and page 22. They are the method; this brief only says what to hand over.
 
+## Where this runs
+On the desktop, where Google Drive is a normal folder. A cloud session cannot pull video files out of Drive.
+
 ## Input
-One tracker row at Stage = In INBOX with a Source. No Source: set Stuck, "no source video", and stop.
+The oldest tracker row at Stage = In INBOX that has a source video in Drive (`01 INBOX — To Remake`, day folders). No video file: set Stuck, "no source video", and take the next row. One row at a time, start to finish.
 
 ## Do
-1. Get the source mp4 from Drive (`01 INBOX — To Remake`) and the transcript. Build the shot list from the frames, never the transcript alone: scene-change cut map plus one still per shot with ffmpeg.
-2. Copy the job folder template and fill it:
-   - `3 SOURCE` — mp4, transcript, one reference still per shot named by clip ID.
-   - `1 SCRIPT` — lines exactly as spoken, per shot, with start-end timestamps and the words-per-second of the source. Change wording only where the product line must become ours; mark each change. 20 words or fewer per line.
-   - `2 STORYBOARD + IMAGES` — the shot table and the image prompts.
-3. Shot table, one row per shot: clip ID, start-end, clip length (4s / 6s / 8s), framing, action, camera move, line, props, and for zoom/tilt shots a start frame and an end frame.
-4. Prop ledger: every prop, which shots it is in. Drop a prop that does not fit its line.
-5. Image prompts per shot in the clone-template wording (character sheet, room sheet, reference still; same pose, angle and framing; exactly two hands; remove on-screen text). Paste the character's locked outfit sentence from their sheet; never write your own description of a character.
-6. One source, several characters: one row and one job folder per character, same script, each in their own room.
-7. Recipe card: write `1 SCRIPT/recipe.md` with the recipe exactly as made in the video - name, ingredients with amounts, numbered steps - and save a still of the end result beside it. The publisher turns this into the Notion recipe page the DM links to.
-8. Fact-check the method: flag unsafe food or remedy steps. If the video names our product, cosmetic wording only, no cure claims.
+1. Copy the job folder template, name it `CHARACTER TOPIC MMDD`, and put the source mp4 in `3 SOURCE`.
+2. Run the breakdown tool. It uses no AI and no credits:
+   `node scripts/reel-breakdown.mjs extract "<job>/3 SOURCE/<video>.mp4" "<job>"`
+   It cuts the video into shots and writes a start, middle and end still for every shot, a frame every half second, labelled contact sheets, the audio track, and `1 SCRIPT/shots.json` with one blank entry per shot. If it found too few or too many cuts, rerun with `--scene 0.2` (more) or `--scene 0.4` (fewer) and `--force`.
+3. Look at the contact sheets in `3 SOURCE/sheets` (not the individual frames) and fill in every shot in `shots.json`:
+   - `dialogue`: exactly as spoken, from the transcript, placed on the shot where it is said. 20 words or fewer per line. Change wording only where the product line must become ours, and say so in `notes`.
+   - `action`: what the hands and body do. `framing`: wide / medium / close-up / macro, angle, what is in frame.
+   - `camera_move`: static, push-in, pull-out, tilt up/down, pan, handheld. Compare the start and end stills to see it. For a zoom or tilt, say the clip needs a start frame and an end frame.
+   - `lighting`: source, direction, warm or cool. `on_screen_text`: what the source shows (it is never carried over). `props`: every prop in the shot.
+   - Top of the file: `source_url`, `hook`, `summary`, `word_count`, `words_per_second` (words divided by duration; our reels run at about 3 to 3.5).
+4. Transcript: use the one in the folder if there is one; otherwise transcribe `3 SOURCE/audio.wav`. Never write the shot list from the transcript alone.
+5. Recipe: fill in `recipe` in `shots.json` (name, ingredients with amounts, numbered steps, `result_still` = the still that shows the finished result). Also save it as `1 SCRIPT/recipe.md`. The publisher turns this into the recipe page the DM card links to.
+6. Build the PDF: `node scripts/reel-breakdown.mjs pdf "<job>"` writes `2 STORYBOARD + IMAGES/breakdown.pdf`. Open it and check no shot is listed as "not described yet".
+7. Image prompts per shot in the clone-template wording (character sheet, room sheet, the shot's start still; same pose, angle and framing; exactly two hands; remove on-screen text), saved as `2 STORYBOARD + IMAGES/image-prompts.md`. Paste the character's locked outfit sentence from their sheet; never write your own description of a character.
+8. Plan for the lead character only. The other characters are added after Dave approves the first finished video.
+9. Fact-check the method: flag unsafe food or remedy steps. If the video names our product, cosmetic wording only, no cure claims.
 
 ## Hand off
-On each row: Drive folder, Storyboard link, Formula, Stage = Ready to build, Owner = Flow agent, Needs Dave ticked ("storyboard ready to check").
+On the row: Drive folder, Storyboard link (the PDF), Formula, Stage = Ready to build, Owner = Flow agent. That stage change is what tells the Flow builder to start. Then take the next inbox row.
 
-Return: per row, shot count, runtime, and anything flagged.
+Return: per row, shot count, runtime, words per second, and anything flagged.

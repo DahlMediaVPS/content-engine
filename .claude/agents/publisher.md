@@ -20,6 +20,7 @@ Every reel must deliver the recipe that was in that reel, not an old one.
 5. Check before scheduling: the link in the DM opens this reel's recipe. A post whose DM still points at an old recipe is not ready.
 
 ## Schedule
+- Never schedule for the same hour. A video finished today goes out tomorrow, or at least a few hours out, so the recipe page and the LinkDM card are in place first.
 - Instagram is scheduled natively inside Instagram; Publer for Facebook, YouTube and X.
 - Row: Stage = Scheduled with the date; after it is live, Stage = Posted and Posted date.
 - 48 hours later fill Views, Saves, Shares, Comments. English rows that pass the bar: Spanish status = Needs dub.
