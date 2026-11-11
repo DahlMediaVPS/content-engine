@@ -1,34 +1,21 @@
-# AI Dave split-screen format (Nov 11 2026)
+# AI Dave reels
 
-Dave's own process document is `pipeline/ai-dave-talking-head-sop-2026-11-11.pdf` and it wins where this file differs. From it: Flow project David Ai Systems; talking clips in FRAMES mode; face reference is the collection "New Ai dave images better lighting" (4 images), look "Dave in Studio 2" (dark studio, mic in hand, blue neon); the 360 head-angle sheet is the second reference so his hair does not flip sides; NEVER use the cream-wall image with the mic at the bottom, or the old "AI Dave ref"; editor is reel-lab (Remotion) with the split-screen kit; output `AI_Dave_<Name>_v1_phone.mp4`; about 45 to 60 minutes a reel, target 2 a day; all AI Dave content is 100% growth, no product claims. If a reference cannot be found, stop; never substitute.
+Authority: Dave's SOP, `pipeline/ai-dave-talking-head-sop-2026-11-11.pdf` (5 pages, Nov 11 2026). It wins over this file and over the Greg builder brain pack for every AI Dave row. Dave updates the SOP in his own doc; re-read it before each batch.
 
-AI Dave sits in his lounge talking to camera in the lower half of the frame. In the upper half a "screen" floats in the room and shows what he is talking about. A step label and a big headline sit beside him. Screen and headline change with each beat.
+## Who does what
+- **Executor (the builder chat):** step 1 teardown (transcript with timings, scene-cut contact sheet, beats labelled, 1-page breakdown saved to the day folder), step 3 clips in Flow, step 4 Remotion edit, step 5 QC and handoff.
+- **Planner (cloud):** step 2, Dave's script, written from the executor's breakdown or a TurboScribe transcript. Dave approves the script before anything is built.
 
-## Reference stills (images in `pipeline/cast/`)
-Talking heads, in Dave's order:
-1. `head-1-shared-start`: seated, calm, mic in hand. The anchor; start most clips from this.
-2. `head-2-closeup-mic`: leaning in, three-quarter. Emphasis moments.
-3. `head-3-three-quarter-neon`: turned to the side, blue neon behind. Asides and reveals.
-4. `head-4-armchair-full`: full body, legs crossed, looking off to the side at the screen. Wide shots, intro and outro.
-5. `head-5-portrait-bokeh`: close portrait, no mic, different background. Not on the SOP's list: standalone hook only, and only if Dave confirms.
-6. `head-6-study-fisheye`: close fisheye, mic at the bottom of the frame, bright room. DO NOT USE: it looks like the "cream-wall image with the mic at the bottom" the SOP bans. Dave to confirm.
-Layout (how the motion graphics should look):
-- `layout-1-screen-top`: screen panel across the top showing a prompt box and a Generate button, step label "01 / ADD YOUR PROMPT", headline "TURN A PHOTO INTO VIDEO", Dave seated below.
-- `layout-2-screen-floating`: screen floating at the upper left in perspective, headline "MAKE IT MOVE" at the upper right, Dave seated below.
+## The rules that matter (all from the SOP)
+- Remake the reel, never copy it: keep beat order and timing, change the story, words and visuals. Never show other creators.
+- Never name or show the tool; say "my system" or "my AI". No tool prices or credit counts.
+- Open on the viewer's problem, never on Dave's numbers. 30 to 60 seconds, about 3.5 words a second.
+- Script lines: 8 seconds, 24 words or fewer, one line per clip. Story = a real moment from Dave's life (the SOP's examples: $54K spent on TikTok for 20 sales; $1,700 a month on tools before building his own). Never invent one.
+- CTA: comment a keyword for a free skill download (the Notion card), plus share and follow first. The keyword must match the Notion card.
+- Flow: project David Ai Systems; collection `AI DAVE <REEL NAME>`; Video, Frames, Omni Flash, 9:16, 8 s, x1, Agent off; the SAME image as start and end frame; one clip about every 90 s; do not heart anything in this project. Voice is automatic.
+- Images: only `head-1` to `head-4` in clips (1 main for every talking clip, 2 and 3 close-ups, 4 wide and breathers). `head-5` is a face check only. `head-6` is BANNED (the cream-wall image; Dave unhearts it in Flow). The two layout stills are cover or thumbnail look only, never a frame.
+- Edit: graphics on top, Dave in a rounded face card at the bottom; alternate a 1.0 and 1.05 punch on each jump cut plus a slow 4% push; top half changes every 1 to 1.5 seconds on the spoken word (real screen recordings first, then Remotion counters, browser windows, checklists, stamps); captions bold tight white sans with white serif-italic key words and no dark band; safe zone y 220 to 1470; audio high-pass 80 Hz, slight presence boost, -14 LUFS; crf 23 phone copy. The `remotion-split-screen-reel` skill holds the detail.
+- Output: `AI_Dave_<Name>_v1_phone.mp4`, plus script, caption, DM text with the skill-download link, and a Notion entry, into the day folder. Never post.
 
-## Rules
-1. One room per video. Heads 1 to 4 and both layouts are the lounge. Never mix other rooms into a lounge video.
-2. Look is locked in `pipeline/cast.md`. Copy it word for word into every prompt.
-3. Frame Dave low: head about 60 to 70 percent down the frame, upper half left as room background so the screen layer can sit there.
-4. The screen layer is built in Remotion on top of the finished Dave clip: a dark rounded panel, slight perspective tilt, warm edge glow, 16:9 content inside. Content is a real screen recording of the tool being discussed, or a Remotion UI card or infographic that Dave owns. Do not paste frames from the source videos.
-5. Headline: small step label ("01 / ADD YOUR PROMPT") in orange or cream, then the title big, white, heavy uppercase sans, 2 to 4 words. One block per beat, clear of Dave's face, inside the safe area.
-6. Captions: the usual two layers (main readable captions plus the tiny corner track).
-7. Voice: inside the Flow project "David Ai Systems" the video model uses Dave's voice automatically. Build AI Dave clips only in that project; no voice clip is attached.
-8. Say only what Dave can deliver. The close and the comment keyword come from the pack.
-
-## Pack per video (written once the breakdown PDFs are in)
-- Script in Dave's own words, not the source's, one line per clip, 20 words or fewer.
-- Beat table: time, Dave's line, which head image, what the screen shows, headline (step label and title).
-- Remotion list: every graphic to build, with its exact text.
-- The close and comment keyword.
-- Anything Dave must confirm.
+## Script pack (what the planner writes per reel)
+Beat table from the source (hook, problem, story, turn, proof, payoff, CTA, with durations), then Dave's script on the same beats, one 24-word line per clip, the top-half visual for each line, the CTA keyword, and anything Dave must confirm. Dave approves it before the executor starts.

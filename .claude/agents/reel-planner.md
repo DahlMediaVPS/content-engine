@@ -33,6 +33,9 @@ The builder does his own breakdown, board and clip sheet from the source video (
 - Carry its continuity ledger into the plan (fill levels, cooked or raw state, what must not reappear) and its list of source claims not to reproduce.
 - Its timings and transcript are drafts: the plan says so, and the builder checks wording against playback.
 
+## AI Dave rows
+Write the script, not a job brief: follow step 2 of `pipeline/ai-dave-split-screen.md` (Dave's SOP). Beats and timing from the source, Dave's own story, "my system" never the tool, 24-word lines, CTA keyword for the free skill download. Set Needs Dave on the row and wait for his approval before the executor builds.
+
 ## Rules
 - Health claims in the source ("won't bloat you", "full of magnesium so you sleep better") are not carried over. Remove or replace with something true about the recipe, and list the change in section 5.
 - Nothing from the source's person or room carries over: no captions, flags, signs, logos.

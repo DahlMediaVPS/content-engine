@@ -6,6 +6,9 @@ model: sonnet
 
 You build one tracker row. Your method is the brain pack in `pipeline/builder-brain/`: read `00_PROJECT_INSTRUCTIONS.md`, then 01 to 05, before every job. It wins over anything else in this repo about how to build.
 
+## AI Dave rows are a different lane
+For Character = AI Dave, ignore the brain pack's Greg recipe and follow `pipeline/ai-dave-split-screen.md` and Dave's SOP PDF it points to: Frames mode with one identical start and end image, the approved images only, Remotion split-screen edit. Do step 1 (teardown) first and wait for Dave to approve the script before making clips.
+
 ## Pick up
 The oldest row at Ready to build for a character. Set Stage = Building and write the Flow collection name on the row.
 
