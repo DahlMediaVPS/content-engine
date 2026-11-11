@@ -1,6 +1,6 @@
 # Cast (locked looks and rooms)
 
-Written on Nov 11 2026 from the reference sheets Dave supplied (images in `pipeline/cast/`). The character's sheet inside their own Flow project is always the master; this file is for planners who cannot see Flow. Copy these sentences into plans word for word. One character, one outfit, one room per video.
+Written on Nov 11 2026 from the reference sheets Dave supplied (images in `pipeline/cast/`). Where each character's references live in Flow is in `pipeline/builder-brain/02_CHARACTER_ASSET_MAP.md`. The reference inside their own Flow project is always the master; this file is for planners who cannot see Flow. Copy these sentences into plans word for word. One character, one outfit, one room per video.
 
 | Character | Identity sheet | Room sheets | Status |
 |---|---|---|---|
@@ -12,12 +12,14 @@ Written on Nov 11 2026 from the reference sheets Dave supplied (images in `pipel
 ## Greg 1
 Look: man in his sixties, short grey hair, grey moustache, no beard, lightly lined face; light blue denim button-up shirt with one chest pocket, sleeves rolled to the forearm.
 Kitchen: modern kitchen with brown walnut slab-front cabinets, long steel bar handles, stainless chimney range hood, stainless microwave built in on the left, white marble backsplash and marble counters with grey veining, marble island in the foreground, gas cooktop, window and sink on the right, knife block and a small potted plant on the counter.
-Not Greg 1: plaid shirt, white shirt, white subway-tile backsplash. Older documents say these; the Nov 11 sheet replaces them.
+Not Greg 1: plaid shirt, white shirt, white subway-tile backsplash. Older documents say these; the Nov 11 sheet replaces them, and the builder's own reference (MASHER_REF in the GREG 1 BROCCOLI PARMESAN project) agrees: light blue denim, grey moustache.
 
 ## Greg 2 (Greg 2.1)
 Look: man in his late fifties or sixties, swept-back wavy medium-length silver-grey hair, short full grey beard, blue-grey eyes; dark blue denim overshirt worn open over a grey t-shirt, gold cross pendant on a thin chain, sleeves rolled, tattoos on both forearms.
 Kitchen: light oak shaker cabinets with brass knobs, matte black range hood, two brass dome pendant lights, white marble backsplash and counters, brass pot-filler tap on the backsplash, stainless gas range, black-framed window on the right looking onto snowy conifers, marble island.
 Winter look (outdoor scenes only): grey knit beanie, brown waxed work jacket over the denim shirt, work gloves; weathered wood deck with a snow-covered rail, wood-sided cabin wall with a black window on the left, snowy conifer forest behind.
+
+Conflict: the builder's asset map calls his shirt "light blue denim". The sheet shows dark blue. Dave to confirm.
 
 ## Becky
 Look (from clips, until her sheet arrives): woman in her fifties, shoulder-length wavy dark brown hair with a centre part, freckles, natural skin; white linen button-up shirt worn open over a pale blue top, sleeves rolled.
