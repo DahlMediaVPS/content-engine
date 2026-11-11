@@ -18,7 +18,7 @@ The November mission lives in Drive: `Greg 1 > 2026-11 November > <day folder>`.
 ## Write the build plan
 One Google Doc in the same day folder, `<CHARACTER>_Vnn_<Name>_BUILD_PLAN`, with these sections (the V17 plan is the model):
 1. Where the source material is (file names in the folder).
-2. Character and room lock, copied from the cast guide or the character's Flow sheet. Never write your own description.
+2. Character and room lock, copied word for word from `pipeline/cast.md`. Never write your own description. If the character's row there says "waiting on" a sheet, say so in the plan.
 3. Format and runtime. Words per second of the source against our 3 to 3.5 tempo.
 4. Script, one line per talking clip, exact words, 20 words or fewer per line. Split longer lines.
 5. Changed from the source: every line removed or reworded, with the reason, so Dave can revert.
@@ -27,6 +27,14 @@ One Google Doc in the same day folder, `<CHARACTER>_Vnn_<Name>_BUILD_PLAN`, with
 8. QC checks specific to this video.
 9. Recipe card: name, ingredients, steps exactly as shown, plus "gaps to confirm" for anything the source does not state (amounts, can sizes, servings). Never invent a quantity.
 10. After the build: no-captions version saved too (needed for Spanish), Dave watches before approval.
+
+## Reading a ChatGPT breakdown pack (from its Master SOP, `pipeline/chatgpt-master-sop-2026-11-11.pdf`)
+- A sentence can appear on two neighbouring cards. That is an alignment aid: it is spoken once.
+- Cards marked "beat" or "continuous beat" are one continuous take, not a cut. Only a true cut gets its own clip.
+- A mug or food pushed toward the lens is a prop move, not a camera move. Do not add a dolly, orbit or zoom the source does not have.
+- Short inserts stay short in the edit, even when the generated clip is longer. Never stretch a shot to fill a clip, and never speed dialogue up to fit one.
+- Carry its continuity ledger into the plan (fill levels, cooked or raw state, what must not reappear) and its list of source claims not to reproduce.
+- Its timings and transcript are drafts: the plan says so, and the builder checks wording against playback.
 
 ## Rules
 - Health claims in the source ("won't bloat you", "full of magnesium so you sleep better") are not carried over. Remove or replace with something true about the recipe, and list the change in section 5.
