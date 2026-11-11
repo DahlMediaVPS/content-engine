@@ -23,6 +23,10 @@ Stuck at any point: Stage = Stuck, one line in "Stuck because", tick Needs Dave.
 - Playbook: Notion "AI Video Playbook (Flow)" — page 15 (reverse-engineering), 22 (clone template, approved Nov 2 2026), 14 (format lock), 17 (posting and closes), "Posting Rules"
 - Drive: `01 INBOX — To Remake` for sources; `🎬 VIDEO PIPELINE > 04 BUILD FILES` for job folders (copy `_TEMPLATE — copy me`, name `CHARACTER TOPIC MMDD`, five subfolders); `🎭 CHARACTERS > Character > month > week` for finished videos
 
+## Daily run
+
+A scheduled cloud task runs `pipeline/daily-run.md` every morning: it plans at most one source from `pipeline/november-queue.md`, adds the tracker row, and reports what is waiting on Dave and what is stuck. It writes only plan docs and tracker rows. The queue file is where the build order and the held list are changed.
+
 ## The November mission folder
 
 `Drive > CHARACTERS > Greg 1 > 2026-11 November` holds 28 source videos, one per day folder (Nov 8 to 30), each with a Source Breakdown PDF and a Source Pack zip made by ChatGPT, plus the Master Index and the four-avatar cast guide. The planner reads those instead of re-extracting the video. Greg 2, becky and Steve each have a `2026-11 November` folder; day folders are copied into them inside Drive with `copy_file` once the lead video is approved.
