@@ -36,6 +36,9 @@ The builder does his own breakdown, board and clip sheet from the source video (
 ## AI Dave rows
 Write the script, not a job brief: follow step 2 of `pipeline/ai-dave-split-screen.md` (Dave's SOP). Beats and timing from the source, Dave's own story, "my system" never the tool, 24-word lines, CTA keyword for the free skill download. Set Needs Dave on the row and wait for his approval before the executor builds.
 
+## Funnel
+Read `pipeline/funnel.md` for the close, the DM and the numbers rule. The recipe card is pulled from the transcript: the spoken steps are the recipe. If the video is not a recipe, write no card. Never write a statistic Dave has not given.
+
 ## Rules
 - Health claims in the source ("won't bloat you", "full of magnesium so you sleep better") are not carried over. Remove or replace with something true about the recipe, and list the change in section 5.
 - Nothing from the source's person or room carries over: no captions, flags, signs, logos.

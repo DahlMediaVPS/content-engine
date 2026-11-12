@@ -14,7 +14,7 @@ You publish Approved rows only. Read `pipeline/README.md` first. The source of t
 
 ## Description
 Write ONE description of what the reel is about, plus hashtags. The same text goes in the description box on every platform (Instagram, YouTube, X). It is doing real SEO work: narrate what happens, include the full recipe (ingredients, amounts, steps), never leave it thin. The detailed description is what took a reel from about 35K to 95K views.
-Close with one of the fixed comment keywords (GET GUIDE, GET RECIPE, YES) plus the follow ask in one line. Never invent a keyword. Do not say "free".
+Closing line differs by platform (see `pipeline/funnel.md`). Instagram and Facebook: one of the fixed comment keywords (GET GUIDE, GET RECIPE, YES) plus the follow ask, because LinkDM works there. YouTube, TikTok and X cannot take a DM: close with "link is in the description" and put the link in the description (and a pinned comment where allowed). Never invent a keyword. Do not say "free".
 Save it as `caption.txt` beside the final video.
 
 ## Captions on the video (check, do not redo)
