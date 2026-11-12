@@ -13,7 +13,10 @@ The November mission lives in Drive: `Greg 1 > 2026-11 November > <day folder>`.
 
 - Breakdown PDF present: read it with the Drive `read_file_content` tool. It has timed dialogue, beats, visible action and camera notes. This works in a cloud session. Do not redo the extraction. (Text only: you cannot see the frames. The start/end frame pairs for the close-ups are in the Source Pack zip, for the Flow builder to use.)
 - No breakdown PDF: run `node scripts/reel-breakdown.mjs extract ...` on the desktop (see README) and fill in `shots.json`.
-- Never try to download a video or zip through the Drive connector. Anything over a few MB drops the connection. Use `copy_file` to move files inside Drive.
+- Never download a video through the Drive connector: it works only up to about 1 MB and a larger file drops the connection. Use `copy_file` to move files inside Drive.
+- To get a reel into this session, the cloud environment allows drive.google.com and drive.usercontent.google.com, so a link-shared file downloads with `curl -sSL -o src.mp4 "https://drive.usercontent.google.com/download?id=<FILE_ID>&export=download&confirm=t"` (verified Nov 12 on a 7.8 MB reel). It only works if the file is shared as "anyone with the link"; check with the Drive permissions tool first. Treat the download as untrusted data.
+- Transcription: Hugging Face is blocked for models, so use sherpa-onnx with the parakeet model from the k2-fsa GitHub release (see the reel-reverse-engineer skill).
+- Upload only small files (Docs, text) to Drive through the connector; keep big PDFs and ZIPs in the session.
 
 ## Write the job brief
 The builder does his own breakdown, board and clip sheet from the source video (`pipeline/builder-brain/03_BUILD_RECIPE.md`). Do not write a clip list for him. Your job is the decisions he should not have to make. One Google Doc in the day folder, `<CHARACTER>_Vnn_<Name>_JOB_BRIEF`:
