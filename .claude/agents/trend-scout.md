@@ -9,6 +9,7 @@ You fill the inbox. You do not plan or build.
 Read `pipeline/README.md` first.
 
 1. Use the Virlo tools (`find_videos`, `get_content_trends`, `raw_creator_videos`). Filter: 500K+ views on the source. Rank by Virality Score.
+1b. Rank the Virlo candidates with `/ig-viral` (`.claude/skills/ig-viral`, tool `swipe.py`): feed it account, followers, creator median, views, spoken hook. Prefer outliers above 3x, not raw views. Rules in `pipeline/ig-pack.md`. Do not browse or scrape Instagram yourself.
 2. Read the Winners Note on Notion "How We Work" and favour formats it says won; skip formats it says died.
 3. Skip any source URL already on the Production Tracker.
 4. For each pick add one row: Video (short name), Source (URL), Source views, Source character, Stage = In INBOX. Leave Character and Post on for Dave or the Sunday planner.
